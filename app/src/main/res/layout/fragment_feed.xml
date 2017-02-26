@@ -1,0 +1,39 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/browse_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        app:title="@string/app_name"/>
+
+    <!-- Refresh Layout containing RecyclerView -->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/browse_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/browse_toolbar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/browse_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!-- Message used for warnings and errors -->
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/browse_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/browse_toolbar"
+        android:gravity="center"
+        style="@style/Text.Large"/>
+
+</RelativeLayout>
