@@ -12,7 +12,9 @@
         android:layout_height="?android:attr/actionBarSize"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary"
-        app:title="@string/app_name"/>
+        android:elevation="4dp"
+        app:title="@string/app_name"
+        app:titleTextColor="@android:color/white"/>
 
     <!-- Refresh Layout containing RecyclerView -->
     <android.support.v4.widget.SwipeRefreshLayout
