@@ -22,4 +22,24 @@ public class Actor {
     public Actor() {
 
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public String getGravatarId() {
+        return gravatarId;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }

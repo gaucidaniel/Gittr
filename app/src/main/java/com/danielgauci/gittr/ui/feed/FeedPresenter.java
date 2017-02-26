@@ -1,7 +1,5 @@
 package com.danielgauci.gittr.ui.feed;
 
-import android.support.v4.content.ContextCompat;
-
 import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.ui.base.BasePresenter;
 
@@ -35,8 +33,10 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(events -> {
+                    // Fetched events
+                    getMvpView().showProgress(false);
                     if (events.isEmpty()) {
-                        getMvpView().showMessage(ContextCompat.);
+                        getMvpView().showMessage("No events found");
                     } else {
                         getMvpView().showEvents(events);
                     }

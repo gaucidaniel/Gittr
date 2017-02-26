@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 public class FeedFragment extends Fragment implements FeedMvpView {
 
     private FeedPresenter mPresenter;
+    private FeedAdapter mAdapter;
 
     @BindView(R.id.browse_toolbar) Toolbar mToolbar;
     @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -48,7 +49,7 @@ public class FeedFragment extends Fragment implements FeedMvpView {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
-        ButterKnife.bind(rootView);
+        ButterKnife.bind(this, rootView);
 
         // Attach fragment to presenter
         mPresenter.attachView(this);
@@ -62,7 +63,9 @@ public class FeedFragment extends Fragment implements FeedMvpView {
 
     private void setupViews(){
         // Setup recycler view
+        mAdapter = new FeedAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     // Implement MVPView methods
@@ -84,6 +87,6 @@ public class FeedFragment extends Fragment implements FeedMvpView {
 
     @Override
     public void showEvents(List<Event> events) {
-
+        mAdapter.setEvents(events);
     }
 }

@@ -18,5 +18,17 @@ public class Repo {
     public Repo() {
 
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
 }
 

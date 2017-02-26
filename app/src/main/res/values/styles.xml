@@ -16,4 +16,14 @@
     <style name="Text.Large">
         <item name="android:textSize">@dimen/font_large</item>
     </style>
+
+    <style name="Text.Small">
+        <item name="android:textSize">@dimen/font_small</item>
+    </style>
+
+    <style name="Text.WithBackground">
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:padding">@dimen/spacing_normal</item>
+        <item name="android:background">@drawable/rounded_background_light_grey</item>
+    </style>
 </resources>
