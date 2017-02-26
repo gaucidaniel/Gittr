@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +29,7 @@ public class FeedFragment extends Fragment implements FeedMvpView {
     @BindView(R.id.browse_toolbar) Toolbar mToolbar;
     @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.browse_recycler_view) RecyclerView mRecyclerView;
-    @BindView(R.id.browse_message) TextViewCompat mMessageTextView;
+    @BindView(R.id.browse_message) AppCompatTextView mMessageTextView;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -67,17 +68,18 @@ public class FeedFragment extends Fragment implements FeedMvpView {
     // Implement MVPView methods
     @Override
     public void showMessage(String message) {
-
+        mMessageTextView.setVisibility(View.GONE);
+        mMessageTextView.setText(message);
     }
 
     @Override
     public void hideMessage() {
-
+        mMessageTextView.setVisibility(View.GONE);
     }
 
     @Override
     public void showProgress(boolean show) {
-
+        mSwipeRefreshLayout.setRefreshing(show);
     }
 
     @Override
