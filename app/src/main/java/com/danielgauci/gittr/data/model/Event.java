@@ -18,7 +18,7 @@ public class Event {
 
     private String id;
     private String type;
-    private Object payload;
+    private Payload payload;
     private Repo repo;
     private User actor;
     private Org org;
@@ -43,7 +43,7 @@ public class Event {
         return isPublic;
     }
 
-    public Object getPayload() {
+    public Payload getPayload() {
         return payload;
     }
 
@@ -79,7 +79,82 @@ public class Event {
         String repoExtra = null;
         switch (getType()) {
             case EventType.CREATE:
-                descriptionBuilder.append("created a new repository");
+                // New repository created
+                descriptionBuilder.append("created a new ");
+                descriptionBuilder.append(payload.getRefType());
+                descriptionBuilder.append(" in");
+                break;
+
+            case EventType.DELETE:
+                // Repository deleted
+                descriptionBuilder.append("deleted repository");
+                break;
+
+            case EventType.FORK:
+                // Repository forked
+                descriptionBuilder.append("forked");
+                break;
+
+            case EventType.ISSUE_COMMENT:
+                // New comment issued on repository
+                descriptionBuilder.append("commented on");
+                repoExtra = "#" + payload.getIssue().getNumber();
+                break;
+
+            case EventType.ISSUES:
+                // Issue was affected on a repository
+                descriptionBuilder.append(payload.getAction());
+                descriptionBuilder.append(" issue");
+                repoExtra = "#" + payload.getIssue().getNumber();
+                break;
+
+            case EventType.MEMBER:
+                // Collaborator change was made on a repository
+                descriptionBuilder.append(payload.getAction());
+                descriptionBuilder.append(" ");
+
+                int memberStartPosition =  descriptionBuilder.length();
+                descriptionBuilder.append(payload.getMember().getLogin());
+                descriptionBuilder.setSpan(
+                        new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)),
+                        memberStartPosition,
+                        descriptionBuilder.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                descriptionBuilder.append(" in");
+                break;
+
+            case EventType.PUBLIC:
+                descriptionBuilder.append("has seen the light and open sourced");
+                break;
+
+            case EventType.PULL_REQUEST_REVIEW:
+            case EventType.PULL_REQUEST:
+                descriptionBuilder.append(payload.getAction());
+                descriptionBuilder.append(" pull request");
+                repoExtra = "#" + payload.getPullRequest().getNumber();
+                break;
+
+            case EventType.PULL_REQUREST_REVIEW_COMMENT:
+                descriptionBuilder.append(payload.getAction());
+                descriptionBuilder.append(" comment on");
+                repoExtra = "#" + payload.getPullRequest().getNumber();
+                break;
+
+            case EventType.PUSH:
+                descriptionBuilder.append("pushed to");
+                break;
+
+            case EventType.RELEASE:
+                descriptionBuilder.append("published a release on");
+                break;
+
+            case EventType.REPOSITORY:
+                descriptionBuilder.append(payload.getAction());
+                break;
+
+            case EventType.WATCH:
+                descriptionBuilder.append("starred");
                 break;
 
             default:
@@ -112,35 +187,17 @@ public class Event {
 
         private final static String CREATE = "CreateEvent";
         private final static String DELETE = "DeleteEvent";
-        private final static String DEPLOYMENT = "DeploymentEvent";
-        private final static String DEPLOYMENT_STATUS = "DeploymentStatusEvent";
-        private final static String DOWNLOAD = "DownloadEvent";
-        private final static String FOLLOW = "FollowEvent";
         private final static String FORK = "ForkEvent";
-        private final static String FORK_APPLY = "ForkApplyEvent";
-        private final static String GIST = "GistEvent";
-        private final static String ISSUE_COMMENT = "CreateEvent";
+        private final static String ISSUE_COMMENT = "IssueCommentEvent";
         private final static String ISSUES = "IssuesEvent";
-        private final static String LABEL = "LabelEvent";
         private final static String MEMBER = "MemberEvent";
-        private final static String MEMBERSHIP = "MembershipEvent";
-        private final static String MILESTONE = "MilestoneEvent";
-        private final static String ORGRANIZATION = "OrganizationEvent";
-        private final static String ORG_BLOCK = "OrgBlockEvent";
-        private final static String PAGE_BUILD = "PageBuildEvent";
-        private final static String PROJECT_CARD = "ProjectCardEvent";
-        private final static String PROJECT_COLUMN = "ProjectColumnEvent";
-        private final static String PROJECT = "ProjectEvent";
         private final static String PUBLIC = "PublicEvent";
         private final static String PULL_REQUEST = "PullRequestEvent";
-        private final static String REQUEST_REVIEW = "PullRequestReviewEvent";
+        private final static String PULL_REQUEST_REVIEW = "PullRequestReviewEvent";
         private final static String PULL_REQUREST_REVIEW_COMMENT = "PullRequestReviewCommentEvent";
         private final static String PUSH = "PushEvent";
         private final static String RELEASE = "ReleaseEvent";
         private final static String REPOSITORY = "RepositoryEvent";
-        private final static String STATUS = "StatusEvent";
-        private final static String TEAM = "TeamEvent";
-        private final static String TEAM_ADD = "TeamAddEvent";
         private final static String WATCH = "WatchEvent";
     }
 }

@@ -53,7 +53,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
 
             // Set profile picture
-            Glide.with(mContext).load(event.getActor().getAvatarUrl()).into(eventViewHolder.profilePictureImageView);
+            Glide.with(mContext)
+                    .load(event.getActor().getAvatarUrl())
+                    .placeholder(R.color.greyLight)
+                    .into(eventViewHolder.profilePictureImageView);
 
             // Set title
             eventViewHolder.titleTextView.setText(event.getDescriptionSpannable(mContext));
