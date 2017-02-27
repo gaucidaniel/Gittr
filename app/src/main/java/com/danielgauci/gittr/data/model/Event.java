@@ -89,6 +89,10 @@ public class Event {
         return descriptionBuilder.toString();
     }
 
+    public String getMessage() {
+        return "";
+    }
+
     public static class EventType {
 
         private final static String CREATE = "CreateEvent";

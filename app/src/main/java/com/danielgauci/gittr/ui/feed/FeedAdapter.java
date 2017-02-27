@@ -58,6 +58,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             // Set title
             eventViewHolder.titleTextView.setText(event.getDescription());
 
+            // Set details
+            if (event.getMessage().isEmpty()){
+                eventViewHolder.detailsTextView.setVisibility(View.GONE);
+            } else  {
+                eventViewHolder.detailsTextView.setVisibility(View.VISIBLE);
+                eventViewHolder.detailsTextView.setText(event.getMessage());
+            }
+
             // Set date
             try {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
