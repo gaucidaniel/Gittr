@@ -3,12 +3,12 @@
     <color name="colorPrimary">@color/teal</color>
     <color name="colorPrimaryDark">@color/tealFaded</color>
     <color name="colorAccent">@color/teal</color>
-    <color name="background">@color/offWhite</color>
+    <color name="background">@color/greyLight</color>
 
     <color name="teal">#4CB5AB</color>
     <color name="tealFaded">#7ABCB6</color>
     <color name="tealDarker">#009688</color>
-    <color name="offWhite">#ECEFF0</color>
     <color name="grey">#95989A</color>
     <color name="greyLight">#ECEFF0</color>
+    <color name="greyVeryLight">#f7f8f9</color>
 </resources>

@@ -56,7 +56,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Glide.with(mContext).load(event.getActor().getAvatarUrl()).into(eventViewHolder.profilePictureImageView);
 
             // Set title
-            eventViewHolder.titleTextView.setText(event.getDescription());
+            eventViewHolder.titleTextView.setText(event.getDescriptionSpannable(mContext));
 
             // Set details
             if (event.getMessage().isEmpty()){

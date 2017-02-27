@@ -4,6 +4,14 @@ package com.danielgauci.gittr.data.model;
  * Created by daniel on 2/24/17.
  */
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+
+import com.danielgauci.gittr.R;
 import com.google.gson.annotations.SerializedName;
 
 public class Event {
@@ -61,15 +69,21 @@ public class Event {
         return createdAt;
     }
 
-    public String getDescription(){
+    public SpannableStringBuilder getDescriptionSpannable(Context context) {
         // Build description string
-        StringBuilder descriptionBuilder = new StringBuilder();
+        SpannableStringBuilder descriptionBuilder = new SpannableStringBuilder();
         descriptionBuilder.append(actor.getLogin());
+        descriptionBuilder.setSpan(new ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.colorPrimary)),
+                        0,
+                        descriptionBuilder.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         descriptionBuilder.append(" ");
 
         // Append body
         String repoExtra = null;
-        switch (getType()){
+        switch (getType()) {
             case EventType.CREATE:
                 descriptionBuilder.append("created a new repository");
                 break;
@@ -80,13 +94,20 @@ public class Event {
         }
 
         // Append repo name
+        int spanStart = descriptionBuilder.length();
         descriptionBuilder.append(" ");
         descriptionBuilder.append(repo.getName());
-        if (repoExtra != null){
+        if (repoExtra != null) {
             descriptionBuilder.append(repoExtra);
         }
 
-        return descriptionBuilder.toString();
+        descriptionBuilder.setSpan(new ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.colorPrimary)),
+                        spanStart,
+                        descriptionBuilder.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return descriptionBuilder;
     }
 
     public String getMessage() {
