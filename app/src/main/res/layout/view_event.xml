@@ -32,6 +32,8 @@
             android:id="@+id/event_item_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_tiny"
+            android:layout_marginBottom="@dimen/spacing_tiny"
             style="@style/Text.WithBackground"/>
 
         <android.support.v7.widget.AppCompatTextView

@@ -13,6 +13,7 @@ public class Payload {
     private String action;
     private Issue issue;
     private Comment comment;
+    private Release release;
     private User member;
     private List<Commit> commits;
     @SerializedName("pull_request")
@@ -46,5 +47,9 @@ public class Payload {
 
     public PullRequest getPullRequest() {
         return pullRequest;
+    }
+
+    public Release getRelease() {
+        return release;
     }
 }

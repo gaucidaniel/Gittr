@@ -80,14 +80,16 @@ public class Event {
         switch (getType()) {
             case EventType.CREATE:
                 // New repository created
-                descriptionBuilder.append("created a new ");
+                descriptionBuilder.append("created ");
                 descriptionBuilder.append(payload.getRefType());
                 descriptionBuilder.append(" in");
                 break;
 
             case EventType.DELETE:
                 // Repository deleted
-                descriptionBuilder.append("deleted repository");
+                descriptionBuilder.append("deleted ");
+                descriptionBuilder.append(payload.getRefType());
+                descriptionBuilder.append(" in");
                 break;
 
             case EventType.FORK:
@@ -180,7 +182,49 @@ public class Event {
     }
 
     public String getMessage() {
-        return "";
+        String quotationMark = "\"";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(quotationMark);
+
+        // Build message based on event type
+        switch (getType()) {
+            case EventType.ISSUE_COMMENT:
+                // New comment issued on repository
+                stringBuilder.append(payload.getComment().getBody());
+                break;
+
+            case EventType.ISSUES:
+                // Issue was affected on a repository
+                stringBuilder.append(payload.getIssue().getTitle());
+                break;
+
+            case EventType.PULL_REQUEST_REVIEW:
+            case EventType.PULL_REQUEST:
+                stringBuilder.append(payload.getPullRequest().getTitle());
+                break;
+
+            case EventType.PULL_REQUREST_REVIEW_COMMENT:
+                stringBuilder.append(payload.getComment().getBody());
+                break;
+
+            case EventType.PUSH:
+                if (!payload.getCommits().isEmpty()) {
+                    stringBuilder.append(payload.getCommits().get(0).getMessage());
+                }
+                break;
+
+            case EventType.RELEASE:
+                stringBuilder.append(payload.getRelease().tagName);
+                break;
+        }
+
+        // Return empty string if no message is available
+        if (stringBuilder.toString().equals(quotationMark)){
+            return "";
+        }
+
+        stringBuilder.append("\"");
+        return stringBuilder.toString();
     }
 
     public static class EventType {
