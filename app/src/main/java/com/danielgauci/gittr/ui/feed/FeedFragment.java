@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 
 public class FeedFragment extends Fragment implements FeedMvpView {
 
@@ -63,6 +65,11 @@ public class FeedFragment extends Fragment implements FeedMvpView {
     }
 
     private void setupViews(){
+        // Setup swipe refresh layout
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.greyLight);
+        RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
+                .subscribe((view) -> mPresenter.getEvents());
+
         // Setup recycler view
         mAdapter = new FeedAdapter(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
