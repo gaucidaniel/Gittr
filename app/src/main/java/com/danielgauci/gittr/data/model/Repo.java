@@ -8,11 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Repo {
 
-    @SerializedName("id")
     private Integer id;
-    @SerializedName("name")
     private String name;
-    @SerializedName("url")
     private String url;
 
     public Repo() {

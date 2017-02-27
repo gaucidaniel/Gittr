@@ -16,22 +16,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class Event {
 
-    @SerializedName("id")
     private String id;
-    @SerializedName("type")
     private String type;
-    @SerializedName("public")
-    private Boolean isPublic;
-    @SerializedName("payload")
     private Object payload;
-    @SerializedName("repo")
     private Repo repo;
-    @SerializedName("actor")
-    private Actor actor;
-    @SerializedName("org")
+    private User actor;
     private Org org;
     @SerializedName("created_at")
     private String createdAt;
+    @SerializedName("public")
+    private Boolean isPublic;
 
     public Event() {
 
@@ -57,7 +51,7 @@ public class Event {
         return repo;
     }
 
-    public Actor getActor() {
+    public User getActor() {
         return actor;
     }
 
