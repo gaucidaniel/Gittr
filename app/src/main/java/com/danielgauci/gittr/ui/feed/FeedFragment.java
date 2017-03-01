@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 
-public class FeedFragment extends Fragment implements FeedMvpView {
+public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
 
     private FeedPresenter mPresenter;
     private FeedAdapter mAdapter;
@@ -72,17 +72,19 @@ public class FeedFragment extends Fragment implements FeedMvpView {
 
         // Setup recycler view
         mAdapter = new FeedAdapter(getActivity());
+        mAdapter.setmClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
     }
 
-    // Implement MVPView methods
     @Override
     public void showMessage(String message) {
         mMessageTextView.setVisibility(View.GONE);
         mMessageTextView.setText(message);
     }
+
+    // Implement MVPView Interface
 
     @Override
     public void hideMessage() {
@@ -97,5 +99,17 @@ public class FeedFragment extends Fragment implements FeedMvpView {
     @Override
     public void showEvents(List<Event> events) {
         mAdapter.setEvents(events);
+    }
+
+    @Override
+    public void showEventDetail(Event event) {
+        // TODO: Open detail activity
+    }
+
+    // Implement Adapter Click listener
+
+    @Override
+    public void onEventClicked(Event event) {
+        mPresenter.onEventSelected(event);
     }
 }

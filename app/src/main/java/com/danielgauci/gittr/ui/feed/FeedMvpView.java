@@ -19,4 +19,5 @@ public interface FeedMvpView extends MvpView{
 
     void showEvents(List<Event> events);
 
+    void showEventDetail(Event event);
 }

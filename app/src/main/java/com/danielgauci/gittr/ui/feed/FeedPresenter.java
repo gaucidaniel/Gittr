@@ -1,6 +1,7 @@
 package com.danielgauci.gittr.ui.feed;
 
 import com.danielgauci.gittr.data.DataManager;
+import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
 
 import org.reactivestreams.Subscription;
@@ -46,5 +47,9 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
                     getMvpView().showMessage(error.getMessage());
                     Timber.e(error, error.getMessage());
                 });
+    }
+
+    public void onEventSelected(Event event){
+        getMvpView().showEventDetail(event);
     }
 }

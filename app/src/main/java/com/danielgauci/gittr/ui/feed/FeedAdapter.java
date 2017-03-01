@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.jakewharton.rxbinding.view.RxView;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -30,6 +31,7 @@ import timber.log.Timber;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private ClickListener mClickListener;
     private List<Event> mEvents;
     private Context mContext;
     private PrettyTime mPrettyTime;
@@ -91,6 +93,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public void setmClickListener(ClickListener mClickListener) {
+        this.mClickListener = mClickListener;
+    }
+
     public class EventViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.event_item_profile_picture) CircleImageView profilePictureImageView;
@@ -101,6 +107,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private EventViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            // Subscribe to click events
+            RxView.clicks(itemView).subscribe((view) -> mClickListener.onEventClicked(mEvents.get(getAdapterPosition())));
         }
+    }
+
+    public interface ClickListener{
+        void onEventClicked(Event event);
     }
 }
