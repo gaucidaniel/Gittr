@@ -19,31 +19,47 @@ import timber.log.Timber;
 public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
     private DataManager mDataManager;
+    private int eventsPage = 0;
+    private boolean isLoading = false;
 
     @Inject
     public FeedPresenter(DataManager dataManager) {
         this.mDataManager = dataManager;
     }
 
-    public void getEvents() {
+    public void getNextEvents() {
         checkViewAttached();
+
+        // Stop if already loading
+        if (isLoading){
+            return;
+        }
 
         // Hide any messages and show progress wheel
         getMvpView().hideMessage();
         getMvpView().showProgress(true);
 
-        // Subscribe to data changes
-        mDataManager.getPublicEvents()
+        // Update flags
+        isLoading = true;
+
+        // Subscribe to data change
+        mDataManager.getPublicEvents(eventsPage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(events -> {
+                    // Update flags
+                    isLoading = false;
+
                     // Fetched events
                     getMvpView().showProgress(false);
                     if (events.isEmpty()) {
                         getMvpView().showMessage("No events found");
                     } else {
-                        getMvpView().showEvents(events);
+                        getMvpView().updateEvents(events, eventsPage == 0);
                     }
+
+                    // Increment page
+                    eventsPage++;
                 }, error -> {
                     // Show error to user and log
                     getMvpView().showProgress(false);
@@ -51,6 +67,12 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
                     Timber.e(error, error.getMessage());
                 });
     }
+
+    public void refreshEvents(){
+        eventsPage = 0;
+        getNextEvents();
+    }
+
 
     public void onEventSelected(Event event){
         getMvpView().showEventDetail(event);

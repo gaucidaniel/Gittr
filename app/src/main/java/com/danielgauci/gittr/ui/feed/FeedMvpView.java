@@ -17,7 +17,7 @@ public interface FeedMvpView extends MvpView{
 
     void showProgress(boolean show);
 
-    void showEvents(List<Event> events);
+    void updateEvents(List<Event> events, boolean clearOldEvents);
 
     void showEventDetail(Event event);
 }

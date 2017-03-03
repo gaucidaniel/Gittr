@@ -1,11 +1,8 @@
 package com.danielgauci.gittr.ui.feed;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +16,7 @@ import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
 import java.util.List;
 
@@ -26,8 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
@@ -64,7 +60,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
 
         // Setup views and get events
         setupViews();
-        mPresenter.getEvents();
+        mPresenter.getNextEvents();
 
         return rootView;
     }
@@ -73,14 +69,29 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         // Setup swipe refresh layout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.greyLight);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
-                .subscribe((view) -> mPresenter.getEvents());
+                .subscribe((view) -> mPresenter.refreshEvents());
 
         // Setup recycler view
         mAdapter.setmClickListener(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int visibleCount = layoutManager.getChildCount();
+                int totalCount = layoutManager.getItemCount();
+                int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleCount + firstVisiblePosition >= totalCount) && firstVisiblePosition >= 0 && totalCount >= 30){
+                    mPresenter.getNextEvents();
+                }
+            }
+        });
     }
 
     @Override
@@ -101,9 +112,14 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         mSwipeRefreshLayout.setRefreshing(show);
     }
 
+
     @Override
-    public void showEvents(List<Event> events) {
-        mAdapter.setEvents(events);
+    public void updateEvents(List<Event> events, boolean clearOldEvents) {
+        if (clearOldEvents){
+            mAdapter.setEvents(events);
+        } else {
+            mAdapter.addEvents(events);
+        }
     }
 
     @Override

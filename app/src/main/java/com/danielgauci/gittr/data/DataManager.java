@@ -28,4 +28,8 @@ public class DataManager {
     public Observable<List<Event>> getPublicEvents(){
         return mGithubService.getPublicEvents();
     }
+
+    public Observable<List<Event>> getPublicEvents(int page){
+        return mGithubService.getPublicEvents(page);
+    }
 }

@@ -91,9 +91,20 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mEvents.size();
     }
 
-    public void setEvents(List<Event> mEvents) {
-        this.mEvents = mEvents;
-        notifyDataSetChanged();
+    public void addEvents(List<Event> newEvents) {
+        int oldSize = mEvents.size();
+        mEvents.addAll(newEvents);
+        notifyItemRangeInserted(oldSize, mEvents.size());
+    }
+
+    public void setEvents(List<Event> events) {
+        boolean eventsVisible = this.mEvents.size() != 0;
+        this.mEvents = events;
+        if (eventsVisible){
+            notifyItemRangeChanged(0, mEvents.size());
+        } else {
+            notifyItemRangeInserted(0, mEvents.size());
+        }
     }
 
     public void setmClickListener(ClickListener mClickListener) {
