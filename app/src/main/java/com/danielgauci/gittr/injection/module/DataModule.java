@@ -17,10 +17,6 @@ import dagger.Provides;
 @Module
 public class DataModule {
 
-    public DataModule() {
-
-    }
-
     @Provides
     @Singleton
     public GithubService provideGithubService(){

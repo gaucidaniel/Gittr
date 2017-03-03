@@ -4,6 +4,8 @@ import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.injection.ViewScope;
 import com.danielgauci.gittr.ui.feed.FeedPresenter;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -20,5 +22,11 @@ public class ViewModule {
     @Singleton
     public FeedPresenter providesFeedPresenter(DataManager dataManager){
         return new FeedPresenter(dataManager);
+    }
+
+    @Provides
+    @Singleton
+    public PrettyTime providesPrettyTime(){
+        return new PrettyTime();
     }
 }

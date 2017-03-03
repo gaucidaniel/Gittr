@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,10 +38,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private PrettyTime mPrettyTime;
 
-    public FeedAdapter(Context mContext) {
+    @Inject
+    public FeedAdapter(Context mContext, PrettyTime prettyTime) {
         this.mContext = mContext;
         this.mEvents = new ArrayList<>();
-        this.mPrettyTime = new PrettyTime();
+        this.mPrettyTime = prettyTime;
     }
 
     @Override

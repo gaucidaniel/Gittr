@@ -31,7 +31,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
 
     @Inject FeedPresenter mPresenter;
-    private FeedAdapter mAdapter;
+    @Inject FeedAdapter mAdapter;
 
     @BindView(R.id.browse_toolbar) Toolbar mToolbar;
     @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -74,7 +74,6 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
                 .subscribe((view) -> mPresenter.getEvents());
 
         // Setup recycler view
-        mAdapter = new FeedAdapter(getActivity());
         mAdapter.setmClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);

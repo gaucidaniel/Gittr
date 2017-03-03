@@ -29,10 +29,4 @@ public class ApplicationModule {
     public Context provideContext(){
         return mApplication;
     }
-
-    @Provides
-    @Singleton
-    public Context provideApplication(){
-        return mApplication;
-    }
 }
