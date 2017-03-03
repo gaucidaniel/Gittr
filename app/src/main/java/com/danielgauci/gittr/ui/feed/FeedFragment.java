@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.plugins.RxAndroidPlugins;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
 
@@ -77,6 +79,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         mAdapter.setmClickListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
     }
 
