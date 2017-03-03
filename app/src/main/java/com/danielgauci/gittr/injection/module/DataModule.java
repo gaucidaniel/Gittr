@@ -1,5 +1,6 @@
 package com.danielgauci.gittr.injection.module;
 
+import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.remote.GithubService;
 import com.danielgauci.gittr.data.remote.GithubServiceFactory;
 
@@ -13,15 +14,21 @@ import dagger.Provides;
  */
 
 @Module
-public class NetworkModule {
+public class DataModule {
 
-    public NetworkModule() {
+    public DataModule() {
 
     }
 
     @Provides
     @Singleton
-    private GithubService provideGithubService(){
+    public GithubService provideGithubService(){
         return GithubServiceFactory.makeGithubService();
+    }
+
+    @Provides
+    @Singleton
+    public DataManager provideDataManager(GithubService githubService){
+        return new DataManager(githubService);
     }
 }

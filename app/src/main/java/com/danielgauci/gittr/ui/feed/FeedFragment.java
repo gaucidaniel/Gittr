@@ -15,11 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +30,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 
 public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
 
-    private FeedPresenter mPresenter;
+    @Inject FeedPresenter mPresenter;
     private FeedAdapter mAdapter;
 
     @BindView(R.id.browse_toolbar) Toolbar mToolbar;
@@ -43,8 +46,8 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create new instance of FeedPresenter
-        mPresenter = new FeedPresenter();
+        // Setup dagger
+        ((Gittr) getActivity().getApplication()).getAppComponent().inject(this);
     }
 
     @Override

@@ -56,6 +56,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.airbnb.android:lottie:1.5.1'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    compile "com.appunite:websockets-rxjava:4.0.1"
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'

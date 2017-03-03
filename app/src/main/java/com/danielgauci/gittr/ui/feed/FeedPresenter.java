@@ -6,6 +6,8 @@ import com.danielgauci.gittr.ui.base.BasePresenter;
 
 import org.reactivestreams.Subscription;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -18,8 +20,9 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
     private DataManager mDataManager;
 
-    public FeedPresenter() {
-        this.mDataManager = new DataManager();
+    @Inject
+    public FeedPresenter(DataManager dataManager) {
+        this.mDataManager = dataManager;
     }
 
     public void getEvents() {

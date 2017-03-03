@@ -19,11 +19,7 @@ import io.reactivex.Single;
 @Singleton
 public class DataManager {
 
-    private final GithubService mGithubService;
-
-    public DataManager(){
-        this.mGithubService = GithubServiceFactory.makeGithubService();
-    }
+    private GithubService mGithubService;
 
     @Inject
     public DataManager(GithubService mGithubService) {
