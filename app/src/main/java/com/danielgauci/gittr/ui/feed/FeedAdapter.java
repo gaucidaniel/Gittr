@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
 import com.jakewharton.rxbinding.view.RxView;
+import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -55,7 +55,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
 
             // Set profile picture
-            Glide.with(mContext)
+            Picasso.with(mContext)
                     .load(event.getActor().getAvatarUrl())
                     .placeholder(R.color.greyLight)
                     .into(eventViewHolder.profilePictureImageView);
