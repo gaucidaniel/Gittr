@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.danielgauci.gittr.Gittr;
-import com.danielgauci.gittr.injection.ApplicationContext;
+import com.danielgauci.gittr.injection.ApplicationScope;
 
 import javax.inject.Singleton;
 
@@ -25,7 +25,7 @@ public class ApplicationModule {
     }
 
     @Provides
-    @ApplicationContext
+    @Singleton
     public Context provideContext(){
         return mApplication;
     }

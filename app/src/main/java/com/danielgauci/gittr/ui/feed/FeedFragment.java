@@ -47,7 +47,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         super.onCreate(savedInstanceState);
 
         // Setup dagger
-        ((Gittr) getActivity().getApplication()).getAppComponent().inject(this);
+        ((Gittr)getActivity().getApplication()).getAppComponent().inject(this);
     }
 
     @Override

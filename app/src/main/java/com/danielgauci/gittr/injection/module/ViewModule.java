@@ -1,6 +1,7 @@
 package com.danielgauci.gittr.injection.module;
 
 import com.danielgauci.gittr.data.DataManager;
+import com.danielgauci.gittr.injection.ViewScope;
 import com.danielgauci.gittr.ui.feed.FeedPresenter;
 
 import javax.inject.Singleton;
@@ -13,7 +14,7 @@ import dagger.Provides;
  */
 
 @Module
-public class FeedModule {
+public class ViewModule {
 
     @Provides
     @Singleton

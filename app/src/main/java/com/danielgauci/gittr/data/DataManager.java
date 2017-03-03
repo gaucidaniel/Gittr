@@ -16,7 +16,6 @@ import io.reactivex.Single;
  * Created by daniel on 2/25/17.
  */
 
-@Singleton
 public class DataManager {
 
     private GithubService mGithubService;

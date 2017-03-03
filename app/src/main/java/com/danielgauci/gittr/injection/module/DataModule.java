@@ -3,6 +3,7 @@ package com.danielgauci.gittr.injection.module;
 import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.remote.GithubService;
 import com.danielgauci.gittr.data.remote.GithubServiceFactory;
+import com.danielgauci.gittr.injection.DataScope;
 
 import javax.inject.Singleton;
 
