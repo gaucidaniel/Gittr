@@ -3,10 +3,4 @@
 
     <item android:drawable="@color/colorPrimary"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_github_face_white_48dp"/>
-    </item>
-
 </layer-list>
