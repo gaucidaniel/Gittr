@@ -3,12 +3,16 @@ package com.danielgauci.gittr.ui.feed;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -55,6 +59,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, rootView);
+        setHasOptionsMenu(true);
 
         // Attach fragment to presenter
         mPresenter.attachView(this);
@@ -66,7 +71,28 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.feed_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.feed_menu_search:
+                break;
+
+            case R.id.feed_menu_filter:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setupViews(){
+        // Setup toolbar
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+
         // Setup swipe refresh layout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.greyLight);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
