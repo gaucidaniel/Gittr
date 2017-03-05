@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
@@ -77,7 +78,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new SlideInUpAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));
+        mRecyclerView.addItemDecoration(new SimpleDividerDecoration(getActivity()));
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
