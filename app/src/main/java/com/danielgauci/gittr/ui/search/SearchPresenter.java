@@ -83,6 +83,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                         mIsLoading = false;
                         mPage++;
                     }, error -> {
+                        mIsLoading = false;
+
                         // Log and display error
                         getMvpView().showProgressWheel(false);
                         getMvpView().showMessage(error.getMessage());

@@ -76,7 +76,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         });
 
         // Show hint
-        showMessage("Type in a username and press enter to search for a user's feed.");
+        showMessage("Type in a username to search for a user's feed.");
     }
 
     private void setupSearchBar() {
@@ -102,7 +102,9 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
                 // Clear events once the text field is empty
                 if (newText.isEmpty()) {
                     mAdapter.clearEvents();
-                    showMessage("Type in a username and press enter to search for a user's feed.");
+                    showMessage("Type in a username to search for a user's feed.");
+                } else  {
+                    mPresenter.search(newText);
                 }
 
                 return true;
