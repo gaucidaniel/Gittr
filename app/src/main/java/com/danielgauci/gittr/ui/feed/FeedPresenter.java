@@ -1,8 +1,11 @@
 package com.danielgauci.gittr.ui.feed;
 
+import android.content.Context;
+
 import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
+import com.danielgauci.gittr.utils.NetworkUtils;
 
 import javax.inject.Inject;
 
@@ -16,13 +19,15 @@ import timber.log.Timber;
 
 public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
+    private Context mContext;
     private DataManager mDataManager;
     private int mPage = 0;
     private boolean mIsLoading = false;
 
     @Inject
-    public FeedPresenter(DataManager dataManager) {
+    public FeedPresenter(DataManager dataManager, Context context) {
         this.mDataManager = dataManager;
+        this.mContext = context;
     }
 
     public void getNextEvents() {
@@ -30,6 +35,15 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
         // Stop if already loading
         if (mIsLoading) {
+            return;
+        }
+
+        // Check network
+        if (!NetworkUtils.isInternetAvailable(mContext)){
+            getMvpView().showInfiniteScrollProgress(false);
+            getMvpView().showProgress(false);
+            getMvpView().clearEvents();
+            getMvpView().showMessage("No internet connection.");
             return;
         }
 

@@ -25,8 +25,8 @@ public class ViewModule {
 
     @Provides
     @Singleton
-    public FeedPresenter providesFeedPresenter(DataManager dataManager){
-        return new FeedPresenter(dataManager);
+    public FeedPresenter providesFeedPresenter(DataManager dataManager, Context context){
+        return new FeedPresenter(dataManager, context);
     }
 
     @Provides
