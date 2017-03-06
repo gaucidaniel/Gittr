@@ -4,8 +4,6 @@ import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
 
-import org.reactivestreams.Subscription;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,8 +17,8 @@ import timber.log.Timber;
 public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
     private DataManager mDataManager;
-    private int eventsPage = 0;
-    private boolean isLoading = false;
+    private int mPage = 0;
+    private boolean mIsLoading = false;
 
     @Inject
     public FeedPresenter(DataManager dataManager) {
@@ -31,43 +29,43 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
         checkViewAttached();
 
         // Stop if already loading
-        if (isLoading) {
+        if (mIsLoading) {
             return;
         }
 
         // Hide any messages and show progress wheel
         getMvpView().hideMessage();
 
-        if (eventsPage == 0) {
+        if (mPage == 0) {
             getMvpView().showProgress(true);
         } else {
             getMvpView().showInfiniteScrollProgress(true);
         }
 
         // Update flags
-        isLoading = true;
+        mIsLoading = true;
 
         // Fetch data from data manager
-        mDataManager.getPublicEvents(eventsPage)
+        mDataManager.getPublicEvents(mPage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(events -> {
                     // Hide progress wheel
-                    if (eventsPage == 0) {
+                    if (mPage == 0) {
                         getMvpView().showProgress(false);
                     } else {
                         getMvpView().showInfiniteScrollProgress(false);
                     }
 
                     // Show message if no results are found
-                    if (events.isEmpty() && eventsPage == 0) {
+                    if (events.isEmpty() && mPage == 0) {
                         getMvpView().showMessage("Feed not found.");
-                        isLoading = false;
+                        mIsLoading = false;
                         return;
                     }
 
                     // Clear search results if necessary
-                    if (eventsPage == 0) {
+                    if (mPage == 0) {
                         getMvpView().clearEvents();
                     }
 
@@ -75,10 +73,10 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
                     getMvpView().updateEvents(events);
 
                     // Update flags
-                    isLoading = false;
-                    eventsPage++;
+                    mIsLoading = false;
+                    mPage++;
                 }, error -> {
-                    isLoading = false;
+                    mIsLoading = false;
 
                     // Log and display error
                     getMvpView().showProgress(false);
@@ -88,7 +86,7 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
     }
 
     public void refreshEvents() {
-        eventsPage = 0;
+        mPage = 0;
         getNextEvents();
     }
 
