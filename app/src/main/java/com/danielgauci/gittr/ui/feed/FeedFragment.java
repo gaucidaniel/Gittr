@@ -36,13 +36,19 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter.ClickListener {
 
-    @Inject FeedPresenter mPresenter;
-    @Inject EventsAdapter mAdapter;
+    @Inject
+    FeedPresenter mPresenter;
+    @Inject
+    EventsAdapter mAdapter;
 
-    @BindView(R.id.browse_toolbar) Toolbar mToolbar;
-    @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.browse_recycler_view) RecyclerView mRecyclerView;
-    @BindView(R.id.browse_message) AppCompatTextView mMessageTextView;
+    @BindView(R.id.browse_toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.browse_swipe_refresh_layout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.browse_recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.browse_message)
+    AppCompatTextView mMessageTextView;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -53,7 +59,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
         super.onCreate(savedInstanceState);
 
         // Setup dagger
-        ((Gittr)getActivity().getApplication()).getAppComponent().inject(this);
+        ((Gittr) getActivity().getApplication()).getAppComponent().inject(this);
     }
 
     @Override
@@ -82,9 +88,9 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.feed_menu_search:
-               View searchIconView = mToolbar.findViewById(R.id.feed_menu_search);
+                View searchIconView = mToolbar.findViewById(R.id.feed_menu_search);
                 Bundle options = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(getActivity(), searchIconView, "transition_search_back")
                         .toBundle();
@@ -98,9 +104,9 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupViews(){
+    private void setupViews() {
         // Setup toolbar
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
 
         // Setup swipe refresh layout
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -115,7 +121,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.addItemDecoration(new SimpleDividerDecoration(getActivity()));
-        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager){
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager) {
             @Override
             public void onLoadMore() {
                 mPresenter.getNextEvents();
@@ -141,14 +147,19 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
         mSwipeRefreshLayout.setRefreshing(show);
     }
 
+    @Override
+    public void showInfiniteScrollProgress(boolean show) {
+        mAdapter.showProgressWheel(show);
+    }
 
     @Override
-    public void updateEvents(List<Event> events, boolean clearOldEvents) {
-        if (clearOldEvents){
-            mAdapter.setEvents(events);
-        } else {
-            mAdapter.addEvents(events);
-        }
+    public void updateEvents(List<Event> events) {
+        mAdapter.addEvents(events);
+    }
+
+    @Override
+    public void clearEvents() {
+        mAdapter.clearEvents();
     }
 
     @Override

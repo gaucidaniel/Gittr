@@ -31,50 +31,69 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
         checkViewAttached();
 
         // Stop if already loading
-        if (isLoading){
+        if (isLoading) {
             return;
         }
 
         // Hide any messages and show progress wheel
         getMvpView().hideMessage();
-        getMvpView().showProgress(true);
+
+        if (eventsPage == 0) {
+            getMvpView().showProgress(true);
+        } else {
+            getMvpView().showInfiniteScrollProgress(true);
+        }
 
         // Update flags
         isLoading = true;
 
-        // Subscribe to data change
+        // Fetch data from data manager
         mDataManager.getPublicEvents(eventsPage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(events -> {
-                    // Update flags
-                    isLoading = false;
-
-                    // Fetched events
-                    getMvpView().showProgress(false);
-                    if (events.isEmpty()) {
-                        getMvpView().showMessage("No events found");
+                    // Hide progress wheel
+                    if (eventsPage == 0) {
+                        getMvpView().showProgress(false);
                     } else {
-                        getMvpView().updateEvents(events, eventsPage == 0);
+                        getMvpView().showInfiniteScrollProgress(false);
                     }
 
-                    // Increment page
+                    // Show message if no results are found
+                    if (events.isEmpty() && eventsPage == 0) {
+                        getMvpView().showMessage("Feed not found.");
+                        isLoading = false;
+                        return;
+                    }
+
+                    // Clear search results if necessary
+                    if (eventsPage == 0) {
+                        getMvpView().clearEvents();
+                    }
+
+                    // Update view with new events
+                    getMvpView().updateEvents(events);
+
+                    // Update flags
+                    isLoading = false;
                     eventsPage++;
                 }, error -> {
-                    // Show error to user and log
+                    isLoading = false;
+
+                    // Log and display error
                     getMvpView().showProgress(false);
                     getMvpView().showMessage(error.getMessage());
                     Timber.e(error, error.getMessage());
                 });
     }
 
-    public void refreshEvents(){
+    public void refreshEvents() {
         eventsPage = 0;
         getNextEvents();
     }
 
 
-    public void onEventSelected(Event event){
+    public void onEventSelected(Event event) {
         getMvpView().showEventDetail(event);
     }
 }
