@@ -90,8 +90,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Search on submit, since searching on every text change
-                // gets the app blocked from the Github API
+                // Search on submit
                 mPresenter.search(query);
                 KeyboardUtils.toggleKeyboard(SearchActivity.this);
                 return true;
@@ -104,6 +103,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
                     mAdapter.clearEvents();
                     showMessage("Type in a username to search for a user's feed.");
                 } else  {
+                    // Search with new query
                     mPresenter.search(newText);
                 }
 
