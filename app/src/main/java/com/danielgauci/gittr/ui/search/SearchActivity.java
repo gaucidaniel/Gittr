@@ -16,6 +16,7 @@ import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.common.InfiniteScrollListener;
 import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
+import com.danielgauci.gittr.utils.KeyboardUtils;
 
 import java.util.List;
 
@@ -92,6 +93,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
                 // Search on submit, since searching on every text change
                 // gets the app blocked from the Github API
                 mPresenter.search(query);
+                KeyboardUtils.toggleKeyboard(SearchActivity.this);
                 return true;
             }
 
