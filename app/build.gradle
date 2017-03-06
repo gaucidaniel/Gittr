@@ -58,6 +58,7 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.airbnb.android:lottie:1.5.1'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    compile 'com.pnikosis:materialish-progress:1.7'
     compile 'com.android.support:design:25.2.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10-rc1'

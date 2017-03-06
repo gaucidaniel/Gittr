@@ -25,11 +25,11 @@ public class DataManager {
         this.mGithubService = mGithubService;
     }
 
-    public Observable<List<Event>> getPublicEvents(){
-        return mGithubService.getPublicEvents();
-    }
-
     public Observable<List<Event>> getPublicEvents(int page){
         return mGithubService.getPublicEvents(page);
+    }
+
+    public Observable<List<Event>> getUserEvents(String username, int page){
+        return mGithubService.getUserEvents(username, page);
     }
 }

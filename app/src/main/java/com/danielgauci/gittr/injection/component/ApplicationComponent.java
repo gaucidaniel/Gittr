@@ -5,6 +5,7 @@ import com.danielgauci.gittr.injection.module.ApplicationModule;
 import com.danielgauci.gittr.injection.module.DataModule;
 import com.danielgauci.gittr.injection.module.ViewModule;
 import com.danielgauci.gittr.ui.feed.FeedFragment;
+import com.danielgauci.gittr.ui.search.SearchActivity;
 
 import javax.inject.Singleton;
 
@@ -19,4 +20,5 @@ import dagger.Component;
 public interface ApplicationComponent {
 
     void inject(FeedFragment feedFragment);
+    void inject(SearchActivity searchActivity);
 }

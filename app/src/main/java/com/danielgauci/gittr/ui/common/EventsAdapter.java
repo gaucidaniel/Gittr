@@ -1,4 +1,4 @@
-package com.danielgauci.gittr.ui.feed;
+package com.danielgauci.gittr.ui.common;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
@@ -31,30 +31,42 @@ import timber.log.Timber;
  * Created by daniel on 2/26/17.
  */
 
-public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private final int TYPE_EVENT = 10;
+    private final int TYPE_PROGRESS = 20;
 
     private ClickListener mClickListener;
     private List<Event> mEvents;
     private Context mContext;
     private PrettyTime mPrettyTime;
+    private boolean mProgressWheelVisible;
 
     @Inject
-    public FeedAdapter(Context mContext, PrettyTime prettyTime) {
+    public EventsAdapter(Context mContext, PrettyTime prettyTime) {
         this.mContext = mContext;
         this.mEvents = new ArrayList<>();
         this.mPrettyTime = prettyTime;
+        this.mProgressWheelVisible = false;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new EventViewHolder(LayoutInflater.from(mContext).inflate(R.layout.view_event, parent, false));
+        switch (viewType) {
+            default:
+            case TYPE_EVENT:
+                return new EventViewHolder(LayoutInflater.from(mContext).inflate(R.layout.view_event, parent, false));
+
+            case TYPE_PROGRESS:
+                return new ProgressViewHolder(LayoutInflater.from(mContext).inflate(R.layout.view_progress, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // Set event data in view
-        Event event = mEvents.get(position);
         if (holder instanceof EventViewHolder){
+            Event event = mEvents.get(position);
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
 
             // Set profile picture
@@ -88,16 +100,38 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mEvents.size();
+        return mProgressWheelVisible ? mEvents.size() + 1 : mEvents.size();
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mProgressWheelVisible && position >= mEvents.size()){
+            return TYPE_PROGRESS;
+        } else  {
+            return TYPE_EVENT;
+        }
     }
 
     public void addEvents(List<Event> newEvents) {
+        // Hide progress wheel when new events are added
+        if (mProgressWheelVisible){
+            showProgressWheel(false);
+        }
+
+        // Add new events to the currently show ones
         int oldSize = mEvents.size();
         mEvents.addAll(newEvents);
         notifyItemRangeInserted(oldSize, mEvents.size());
     }
 
     public void setEvents(List<Event> events) {
+        // Hide progress wheel when new events are added
+        if (mProgressWheelVisible){
+            showProgressWheel(false);
+        }
+
+        // Replace any events with new ones
         boolean eventsVisible = this.mEvents.size() != 0;
         this.mEvents = events;
         if (eventsVisible){
@@ -107,7 +141,19 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public void setmClickListener(ClickListener mClickListener) {
+    public void clearEvents(){
+        // Clear all events from adapter
+        this.mEvents.clear();
+        notifyDataSetChanged();
+    }
+
+    public void showProgressWheel(boolean show){
+        mProgressWheelVisible = show;
+        notifyDataSetChanged();
+    }
+
+    public void registerEventClickListener(ClickListener mClickListener) {
+        // Register click listener for events
         this.mClickListener = mClickListener;
     }
 
@@ -124,6 +170,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             // Subscribe to click events
             RxView.clicks(itemView).subscribe((view) -> mClickListener.onEventClicked(mEvents.get(getAdapterPosition())));
+        }
+    }
+
+    public class ProgressViewHolder extends RecyclerView.ViewHolder{
+
+        private ProgressViewHolder(View itemView) {
+            super(itemView);
         }
     }
 

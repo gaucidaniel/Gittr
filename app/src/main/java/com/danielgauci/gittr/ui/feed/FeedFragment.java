@@ -1,11 +1,12 @@
 package com.danielgauci.gittr.ui.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -19,9 +20,11 @@ import android.view.ViewGroup;
 import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.ui.common.EventsAdapter;
+import com.danielgauci.gittr.ui.common.InfiniteScrollListener;
 import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
+import com.danielgauci.gittr.ui.search.SearchActivity;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
-import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
 import java.util.List;
 
@@ -31,10 +34,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.ClickListener {
+public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter.ClickListener {
 
     @Inject FeedPresenter mPresenter;
-    @Inject FeedAdapter mAdapter;
+    @Inject EventsAdapter mAdapter;
 
     @BindView(R.id.browse_toolbar) Toolbar mToolbar;
     @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -81,6 +84,12 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.feed_menu_search:
+               View searchIconView = mToolbar.findViewById(R.id.feed_menu_search);
+                Bundle options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(getActivity(), searchIconView, "transition_search_back")
+                        .toBundle();
+
+                startActivity(new Intent(getActivity(), SearchActivity.class), options);
                 break;
 
             case R.id.feed_menu_filter:
@@ -94,29 +103,22 @@ public class FeedFragment extends Fragment implements FeedMvpView, FeedAdapter.C
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
 
         // Setup swipe refresh layout
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.greyLight);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark);
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .subscribe((view) -> mPresenter.refreshEvents());
 
         // Setup recycler view
-        mAdapter.setmClickListener(this);
+        mAdapter.registerEventClickListener(this);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.addItemDecoration(new SimpleDividerDecoration(getActivity()));
-
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager){
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int visibleCount = layoutManager.getChildCount();
-                int totalCount = layoutManager.getItemCount();
-                int firstVisiblePosition = layoutManager.findFirstVisibleItemPosition();
-
-                if ((visibleCount + firstVisiblePosition >= totalCount) && firstVisiblePosition >= 0 && totalCount >= 30){
-                    mPresenter.getNextEvents();
-                }
+            public void onLoadMore() {
+                mPresenter.getNextEvents();
             }
         });
     }

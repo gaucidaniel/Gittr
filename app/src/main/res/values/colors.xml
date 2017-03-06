@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/teal</color>
     <color name="colorPrimaryDark">@color/tealFaded</color>
-    <color name="colorAccent">@color/teal</color>
+    <color name="colorAccent">@color/greyLight</color>
     <color name="background">@color/greyLight</color>
 
     <color name="teal">#4CB5AB</color>
@@ -11,4 +11,5 @@
     <color name="grey">#95989A</color>
     <color name="greyLight">#ECEFF0</color>
     <color name="greyVeryLight">#f7f8f9</color>
+    <color name="semiTransparent">#64000000</color>
 </resources>
