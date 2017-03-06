@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import timber.log.Timber;
 
@@ -112,6 +113,10 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         });
     }
 
+    @OnClick(R.id.search_back_button)
+    public void onBackButtonClicked(){
+        finishAfterTransition();
+    }
 
     // Implement MVPView methods
 
