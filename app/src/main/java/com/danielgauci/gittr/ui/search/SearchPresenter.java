@@ -1,8 +1,11 @@
 package com.danielgauci.gittr.ui.search;
 
+import android.content.Context;
+
 import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
+import com.danielgauci.gittr.utils.NetworkUtils;
 
 import javax.inject.Inject;
 
@@ -16,13 +19,15 @@ import timber.log.Timber;
 
 public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
+    private Context mContext;
     private DataManager mDataManager;
     private String mQuery;
     private int mPage;
     private boolean mIsLoading;
 
     @Inject
-    public SearchPresenter(DataManager mDataManager) {
+    public SearchPresenter(DataManager mDataManager, Context context) {
+        this.mContext = context;
         this.mDataManager = mDataManager;
         this.mPage = 0;
         this.mIsLoading = false;
@@ -31,6 +36,14 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     public void search(String username){
         checkViewAttached();
+
+        // Check network
+        if (!NetworkUtils.isInternetAvailable(mContext)){
+            getMvpView().showProgressWheel(false);
+            getMvpView().clearSearchResults();
+            getMvpView().showMessage("No internet connection.");
+            return;
+        }
 
         // Reset current state
         mPage = 0;
@@ -44,7 +57,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         if (mQuery == null){
             Timber.e("Search query must be initialized by calling search(String username)" +
                     "before requesting the next user events.");
-
             return;
         }
 

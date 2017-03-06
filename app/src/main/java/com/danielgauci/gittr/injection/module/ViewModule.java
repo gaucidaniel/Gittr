@@ -31,8 +31,8 @@ public class ViewModule {
 
     @Provides
     @Singleton
-    public SearchPresenter providesSearchPresenter(DataManager dataManager){
-        return new SearchPresenter(dataManager);
+    public SearchPresenter providesSearchPresenter(DataManager dataManager, Context context){
+        return new SearchPresenter(dataManager, context);
     }
 
     @Provides
