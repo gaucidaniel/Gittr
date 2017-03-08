@@ -36,8 +36,10 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private final int TYPE_EVENT = 10;
     private final int TYPE_PROGRESS = 20;
 
-    private ClickListener mClickListener;
-    private List<Event> mEvents;
+    private EventsListener mEventsListener;
+    private List<Event> mAllEvents;
+    private List<Event> mFilteredEvents;
+    private List<String> mEnabledFilters;
     private Context mContext;
     private PrettyTime mPrettyTime;
     private boolean mProgressWheelVisible;
@@ -45,7 +47,9 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Inject
     public EventsAdapter(Context mContext, PrettyTime prettyTime) {
         this.mContext = mContext;
-        this.mEvents = new ArrayList<>();
+        this.mAllEvents = new ArrayList<>();
+        this.mFilteredEvents = new ArrayList<>();
+        this.mEnabledFilters = new ArrayList<>();
         this.mPrettyTime = prettyTime;
         this.mProgressWheelVisible = false;
     }
@@ -66,7 +70,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // Set event data in view
         if (holder instanceof EventViewHolder){
-            Event event = mEvents.get(position);
+            Event event = mFilteredEvents.get(position);
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
 
             // Set profile picture
@@ -100,13 +104,13 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return mProgressWheelVisible ? mEvents.size() + 1 : mEvents.size();
+        return mProgressWheelVisible ? mFilteredEvents.size() + 1 : mFilteredEvents.size();
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (mProgressWheelVisible && position >= mEvents.size()){
+        if (mProgressWheelVisible && position >= mFilteredEvents.size()){
             return TYPE_PROGRESS;
         } else  {
             return TYPE_EVENT;
@@ -119,32 +123,45 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             showProgressWheel(false);
         }
 
-        // Add new events to the currently show ones
-        int oldSize = mEvents.size();
-        mEvents.addAll(newEvents);
-        notifyItemRangeInserted(oldSize, mEvents.size());
-    }
+        // Update all events
+        mAllEvents.addAll(newEvents);
 
-    public void setEvents(List<Event> events) {
-        // Hide progress wheel when new events are added
-        if (mProgressWheelVisible){
-            showProgressWheel(false);
-        }
+        // Add new filtered events to the currently show ones
+        int oldSize = mFilteredEvents.size();
+        mFilteredEvents.addAll(filterEvents(newEvents, mEnabledFilters));
+        notifyItemRangeInserted(oldSize, mFilteredEvents.size());
 
-        // Replace any events with new ones
-        boolean eventsVisible = this.mEvents.size() != 0;
-        this.mEvents = events;
-        if (eventsVisible){
-            notifyItemRangeChanged(0, mEvents.size());
-        } else {
-            notifyItemRangeInserted(0, mEvents.size());
-        }
+        checkIfFilteredEventsEmpty();
     }
 
     public void clearEvents(){
         // Clear all events from adapter
-        this.mEvents.clear();
+        this.mAllEvents.clear();
+        this.mFilteredEvents.clear();
         notifyDataSetChanged();
+    }
+
+    public void addFilter(String filter){
+        mEnabledFilters.add(filter);
+        mFilteredEvents = filterEvents(mAllEvents, mEnabledFilters);
+        notifyDataSetChanged();
+    }
+
+    public void removeFilter(String filter){
+        mEnabledFilters.remove(filter);
+        mFilteredEvents = filterEvents(mAllEvents, mEnabledFilters);
+        notifyDataSetChanged();
+    }
+
+    public List<Event> filterEvents(List<Event> allEvents, List<String> enabledFilters){
+        List<Event> filteredEvents = new ArrayList<>();
+        for (Event event : allEvents) {
+            if (!enabledFilters.contains(event.getType())){
+                filteredEvents.add(event);
+            }
+        }
+
+        return filteredEvents;
     }
 
     public void showProgressWheel(boolean show){
@@ -152,9 +169,15 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyDataSetChanged();
     }
 
-    public void registerEventClickListener(ClickListener mClickListener) {
+    public void registerEventClickListener(EventsListener mEventsListener) {
         // Register click listener for events
-        this.mClickListener = mClickListener;
+        this.mEventsListener = mEventsListener;
+    }
+
+    private void checkIfFilteredEventsEmpty(){
+        if (mFilteredEvents.isEmpty() && !mAllEvents.isEmpty()){
+            mEventsListener.onFilterResultsEmpty();
+        }
     }
 
     public class EventViewHolder extends RecyclerView.ViewHolder{
@@ -169,7 +192,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ButterKnife.bind(this, itemView);
 
             // Subscribe to click events
-            RxView.clicks(itemView).subscribe((view) -> mClickListener.onEventClicked(mEvents.get(getAdapterPosition())));
+            RxView.clicks(itemView).subscribe((view) -> mEventsListener.onEventClicked(mAllEvents.get(getAdapterPosition())));
         }
     }
 
@@ -180,7 +203,10 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public interface ClickListener{
+    public interface EventsListener {
+
+        void onFilterResultsEmpty();
+
         void onEventClicked(Event event);
     }
 }

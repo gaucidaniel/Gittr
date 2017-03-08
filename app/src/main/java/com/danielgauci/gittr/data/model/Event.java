@@ -229,19 +229,19 @@ public class Event {
 
     public static class EventType {
 
-        private final static String CREATE = "CreateEvent";
-        private final static String DELETE = "DeleteEvent";
-        private final static String FORK = "ForkEvent";
-        private final static String ISSUE_COMMENT = "IssueCommentEvent";
-        private final static String ISSUES = "IssuesEvent";
-        private final static String MEMBER = "MemberEvent";
-        private final static String PUBLIC = "PublicEvent";
-        private final static String PULL_REQUEST = "PullRequestEvent";
-        private final static String PULL_REQUEST_REVIEW = "PullRequestReviewEvent";
-        private final static String PULL_REQUREST_REVIEW_COMMENT = "PullRequestReviewCommentEvent";
-        private final static String PUSH = "PushEvent";
-        private final static String RELEASE = "ReleaseEvent";
-        private final static String REPOSITORY = "RepositoryEvent";
-        private final static String WATCH = "WatchEvent";
+        public final static String CREATE = "CreateEvent";
+        public final static String DELETE = "DeleteEvent";
+        public final static String FORK = "ForkEvent";
+        public final static String ISSUE_COMMENT = "IssueCommentEvent";
+        public final static String ISSUES = "IssuesEvent";
+        public final static String MEMBER = "MemberEvent";
+        public final static String PUBLIC = "PublicEvent";
+        public final static String PULL_REQUEST = "PullRequestEvent";
+        public final static String PULL_REQUEST_REVIEW = "PullRequestReviewEvent";
+        public final static String PULL_REQUREST_REVIEW_COMMENT = "PullRequestReviewCommentEvent";
+        public final static String PUSH = "PushEvent";
+        public final static String RELEASE = "ReleaseEvent";
+        public final static String REPOSITORY = "RepositoryEvent";
+        public final static String WATCH = "WatchEvent";
     }
 }

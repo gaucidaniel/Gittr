@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.data.model.Filter;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.common.InfiniteScrollListener;
 import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
@@ -34,21 +37,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter.ClickListener {
+public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter.EventsListener, FiltersAdapter.FilterListener {
 
-    @Inject
-    FeedPresenter mPresenter;
-    @Inject
-    EventsAdapter mAdapter;
+    @Inject FeedPresenter mPresenter;
+    @Inject EventsAdapter mEventsAdapter;
+    @Inject FiltersAdapter mFiltersAdapter;
 
-    @BindView(R.id.browse_toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.browse_swipe_refresh_layout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.browse_recycler_view)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.browse_message)
-    AppCompatTextView mMessageTextView;
+    @BindView(R.id.browse_drawer) DrawerLayout mDrawerLayout;
+    @BindView(R.id.browse_toolbar) Toolbar mToolbar;
+    @BindView(R.id.browse_swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.browse_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.browse_filters_recycler_view) RecyclerView mFiltersRecyclerView;
+    @BindView(R.id.browse_message) AppCompatTextView mMessageTextView;
 
     public FeedFragment() {
         // Required empty public constructor
@@ -99,6 +99,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
                 break;
 
             case R.id.feed_menu_filter:
+                mDrawerLayout.openDrawer(Gravity.END);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -113,29 +114,34 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
         RxSwipeRefreshLayout.refreshes(mSwipeRefreshLayout)
                 .subscribe((view) -> mPresenter.refreshEvents());
 
-        // Setup recycler view
-        mAdapter.registerEventClickListener(this);
+        // Setup events recycler view
+        mEventsAdapter.registerEventClickListener(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(mAdapter);
+        LinearLayoutManager eventsLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(eventsLayoutManager);
+        mRecyclerView.setAdapter(mEventsAdapter);
         mRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mRecyclerView.addItemDecoration(new SimpleDividerDecoration(getActivity()));
-        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager) {
+        mRecyclerView.addOnScrollListener(new InfiniteScrollListener(eventsLayoutManager) {
             @Override
             public void onLoadMore() {
                 mPresenter.getNextEvents();
             }
         });
+
+        // Setup filters recycler view
+        mFiltersAdapter.registerFilterListner(this);
+        mFiltersRecyclerView.setAdapter(mFiltersAdapter);
+        mFiltersRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
+
+    // Implement MVPView Interface
 
     @Override
     public void showMessage(String message) {
         mMessageTextView.setVisibility(View.GONE);
         mMessageTextView.setText(message);
     }
-
-    // Implement MVPView Interface
 
     @Override
     public void hideMessage() {
@@ -149,17 +155,17 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
 
     @Override
     public void showInfiniteScrollProgress(boolean show) {
-        mAdapter.showProgressWheel(show);
+        mEventsAdapter.showProgressWheel(show);
     }
 
     @Override
     public void updateEvents(List<Event> events) {
-        mAdapter.addEvents(events);
+        mEventsAdapter.addEvents(events);
     }
 
     @Override
     public void clearEvents() {
-        mAdapter.clearEvents();
+        mEventsAdapter.clearEvents();
     }
 
     @Override
@@ -170,7 +176,24 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
     // Implement Adapter Click listener
 
     @Override
+    public void onFilterResultsEmpty() {
+        showMessage("No events found. Adjust the filters to show more events.");
+    }
+
+    @Override
     public void onEventClicked(Event event) {
         mPresenter.onEventSelected(event);
+    }
+
+    // Implement Filter listener
+
+    @Override
+    public void onFilterAdded(Filter filter) {
+        mEventsAdapter.addFilter(filter.getKey());
+    }
+
+    @Override
+    public void onFilterRemoved(Filter filter) {
+        mEventsAdapter.removeFilter(filter.getKey());
     }
 }

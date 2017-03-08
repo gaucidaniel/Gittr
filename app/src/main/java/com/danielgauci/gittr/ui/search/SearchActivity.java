@@ -28,7 +28,7 @@ import butterknife.OnClick;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import timber.log.Timber;
 
-public class SearchActivity extends AppCompatActivity implements SearchMvpView, EventsAdapter.ClickListener {
+public class SearchActivity extends AppCompatActivity implements SearchMvpView, EventsAdapter.EventsListener {
 
     @Inject SearchPresenter mPresenter;
     @Inject EventsAdapter mAdapter;
@@ -150,6 +150,14 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
     public void eventSelected(Event event) {
         // TODO: Open detail screen
     }
+
+    // Implement EventsListener methods
+
+    @Override
+    public void onFilterResultsEmpty() {
+        showMessage("No events found. Adjust the filters to show more events.");
+    }
+
 
     @Override
     public void onEventClicked(Event event) {

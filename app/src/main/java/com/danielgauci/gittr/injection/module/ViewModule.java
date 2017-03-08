@@ -6,6 +6,7 @@ import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.injection.ViewScope;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.feed.FeedPresenter;
+import com.danielgauci.gittr.ui.feed.FiltersAdapter;
 import com.danielgauci.gittr.ui.search.SearchMvpView;
 import com.danielgauci.gittr.ui.search.SearchPresenter;
 
@@ -44,5 +45,10 @@ public class ViewModule {
     @Provides
     public EventsAdapter providesEventsAdapter(Context context, PrettyTime prettyTime){
         return new EventsAdapter(context, prettyTime);
+    }
+
+    @Provides
+    public FiltersAdapter providesFiltersAdapter(Context context){
+        return new FiltersAdapter(context);
     }
 }
