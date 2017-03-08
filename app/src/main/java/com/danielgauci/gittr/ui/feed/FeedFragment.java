@@ -139,7 +139,7 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
 
     @Override
     public void showMessage(String message) {
-        mMessageTextView.setVisibility(View.GONE);
+        mMessageTextView.setVisibility(View.VISIBLE);
         mMessageTextView.setText(message);
     }
 
