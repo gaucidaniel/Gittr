@@ -7,9 +7,12 @@ import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
 import com.danielgauci.gittr.utils.NetworkUtils;
 
+import org.reactivestreams.Subscription;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -62,6 +65,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
         if (!mIsLoading) {
             checkViewAttached();
+
             mIsLoading = true;
 
             // Show progress wheel
