@@ -77,7 +77,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         });
 
         // Show hint
-        showMessage("Type in a username to search for a user's feed.");
+        showMessage("Type in a username and press enter to search for a user's feed.");
     }
 
     private void setupSearchBar() {
@@ -92,6 +92,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Search on submit
+                // Only searching on submission to avoiding reaching the Github API request limit
                 mPresenter.search(query);
                 KeyboardUtils.toggleKeyboard(SearchActivity.this);
                 return true;
@@ -102,10 +103,7 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
                 // Clear events once the text field is empty
                 if (newText.isEmpty()) {
                     mAdapter.clearEvents();
-                    showMessage("Type in a username to search for a user's feed.");
-                } else  {
-                    // Search with new query
-                    mPresenter.search(newText);
+                    showMessage("Type in a username and press enter to search for a user's feed.");
                 }
 
                 return true;

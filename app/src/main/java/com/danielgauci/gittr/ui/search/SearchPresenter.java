@@ -7,7 +7,8 @@ import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
 import com.danielgauci.gittr.utils.NetworkUtils;
 
-import org.reactivestreams.Subscription;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private Context mContext;
     private DataManager mDataManager;
     private String mQuery;
+    private Disposable mSubscription;
     private int mPage;
     private boolean mIsLoading;
 
@@ -37,11 +39,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         this.mQuery = null;
     }
 
-    public void search(String username){
+    public void search(String username) {
         checkViewAttached();
 
         // Check network
-        if (!NetworkUtils.isInternetAvailable(mContext)){
+        if (!NetworkUtils.isInternetAvailable(mContext)) {
             getMvpView().showProgressWheel(false);
             getMvpView().clearSearchResults();
             getMvpView().showMessage("No internet connection.");
@@ -56,8 +58,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         getNextUserEvents();
     }
 
-    public void getNextUserEvents(){
-        if (mQuery == null){
+    public void getNextUserEvents() {
+        if (mQuery == null) {
             Timber.e("Search query must be initialized by calling search(String username)" +
                     "before requesting the next user events.");
             return;
@@ -73,7 +75,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             getMvpView().hideMessage();
 
             // Fetch data from data manager
-            mDataManager.getUserEvents(mQuery, mPage)
+            mSubscription = mDataManager.getUserEvents(mQuery, mPage)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(events -> {
@@ -88,7 +90,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                         }
 
                         // Clear search results if necessary
-                        if (mPage == 0){
+                        if (mPage == 0) {
                             getMvpView().clearSearchResults();
                         }
 
@@ -98,10 +100,12 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                         // Update flags
                         mIsLoading = false;
                         mPage++;
+
                     }, error -> {
                         mIsLoading = false;
 
                         // Log and display error
+                        getMvpView().clearSearchResults();
                         getMvpView().showProgressWheel(false);
                         getMvpView().showMessage(error.getMessage());
                         Timber.e(error, error.getMessage());
@@ -109,7 +113,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         }
     }
 
-    public void showEventDetail(Event event){
+    public void showEventDetail(Event event) {
         getMvpView().eventSelected(event);
     }
 }

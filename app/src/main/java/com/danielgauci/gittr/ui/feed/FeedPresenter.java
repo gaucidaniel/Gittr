@@ -93,6 +93,7 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
                     mIsLoading = false;
 
                     // Log and display error
+                    getMvpView().clearEvents();
                     getMvpView().showProgress(false);
                     getMvpView().showMessage(error.getMessage());
                     Timber.e(error, error.getMessage());

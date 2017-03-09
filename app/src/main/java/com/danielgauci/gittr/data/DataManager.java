@@ -7,10 +7,8 @@ import com.danielgauci.gittr.data.remote.GithubServiceFactory;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 /**
  * Created by daniel on 2/25/17.
