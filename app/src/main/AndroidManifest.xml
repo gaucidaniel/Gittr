@@ -24,7 +24,8 @@
         </activity>
         <activity android:name=".ui.feed.FeedActivity" />
         <activity android:name=".ui.search.SearchActivity" />
-        <activity android:name=".ui.feeddetail.FeedDetailActivity"></activity>
+        <activity android:name=".ui.feeddetail.FeedDetailActivity"
+            android:theme="@style/AppTheme.Detail"/>
     </application>
 
 </manifest>

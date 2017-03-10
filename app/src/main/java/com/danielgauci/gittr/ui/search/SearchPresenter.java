@@ -113,10 +113,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         }
     }
 
-    public void showEventDetail(Event event) {
-        getMvpView().eventSelected(event);
-    }
-
     @Override
     public void detachView() {
         super.detachView();

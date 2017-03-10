@@ -1,48 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:padding="@dimen/spacing_large">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/event_item_profile_picture"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:civ_border_color="@color/greyLight"
-        app:civ_border_width="2dp"/>
+    <View
+        android:id="@+id/feed_detail_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:transitionName="feedDetailBackground"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/spacing_large"
-        android:layout_marginStart="@dimen/spacing_large"
-        android:orientation="vertical">
+        android:padding="@dimen/spacing_large">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/event_item_title"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/event_item_profile_picture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:transitionName="eventItemProfilePicture"
+            app:civ_border_color="@color/greyLight"
+            app:civ_border_width="2dp"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_tiny"
-            style="@style/Text"/>
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/event_item_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_tiny"
-            android:layout_marginBottom="@dimen/spacing_tiny"
-            android:maxLines="2"
-            android:ellipsize="end"
-            style="@style/Text.WithBackground"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/event_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_tiny"
+                android:transitionName="eventItemTitle"
+                style="@style/Text"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/event_item_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_tiny"
-            style="@style/Text.Small"/>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/event_item_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:layout_marginBottom="@dimen/spacing_tiny"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:transitionName="eventItemMessage"
+                style="@style/Text.WithBackground"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/event_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_tiny"
+                android:transitionName="eventItemDate"
+                style="@style/Text.Small"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

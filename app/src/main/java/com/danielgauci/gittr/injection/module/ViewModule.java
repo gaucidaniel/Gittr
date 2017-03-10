@@ -38,8 +38,8 @@ public class ViewModule {
     }
 
     @Provides
-    FeedDetailPresenter providesDetailPresenter(DataManager dataManager, Context context){
-        return new FeedDetailPresenter(dataManager, context);
+    FeedDetailPresenter providesDetailPresenter(DataManager dataManager, PrettyTime prettyTime, Context context){
+        return new FeedDetailPresenter(dataManager, prettyTime, context);
     }
 
     @Provides

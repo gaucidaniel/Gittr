@@ -3,6 +3,7 @@ package com.danielgauci.gittr.ui.feeddetail;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -15,19 +16,24 @@ import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
 import com.pnikosis.materialishprogress.ProgressWheel;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import br.tiagohm.markdownview.MarkdownView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FeedDetailActivity extends AppCompatActivity implements FeedDetailMvpView {
 
     public final static String EXTRA_EVENT = "extraEvent";
 
+    @BindView(R.id.feed_detail_toolbar) Toolbar mToolbar;
     @BindView(R.id.event_item_title) TextView mEventDescriptionTextView;
     @BindView(R.id.event_item_details) TextView mEventMessageTextView;
+    @BindView(R.id.event_item_profile_picture) CircleImageView mEventProfilePictureView;
+    @BindView(R.id.event_item_date) TextView mEventDateTextView;
     @BindView(R.id.feed_detail_repo_title) TextView mRepoTitle;
     @BindView(R.id.feed_detail_repo_description) TextView mRepoDescription;
     @BindView(R.id.feed_detail_repo_language) TextView mRepoLanguage;
@@ -55,6 +61,27 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
         Event event = getIntent().getParcelableExtra(EXTRA_EVENT);
         mPresenter.attachView(this);
         mPresenter.setEvent(event);
+
+        // Setup back button
+        mToolbar.setNavigationOnClickListener((View v) -> {
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mPresenter != null){
+            mPresenter.detachView();
+        }
+
+        super.onDestroy();
     }
 
     // Implement MVP View
@@ -72,6 +99,20 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
             mEventMessageTextView.setVisibility(View.VISIBLE);
             mEventMessageTextView.setText(message);
         }
+    }
+
+    @Override
+    public void setEventDate(String dateString) {
+        mEventDateTextView.setText(dateString);
+    }
+
+    @Override
+    public void setEventProfilePicture(String profilePictureUrl) {
+        // Set profile picture
+        Picasso.with(this)
+                .load(profilePictureUrl)
+                .placeholder(R.color.greyLight)
+                .into(mEventProfilePictureView);
     }
 
     @Override
@@ -121,6 +162,7 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
     @Override
     public void setRepoReadme(String readme) {
         mReadmeMarkdownView.loadMarkdown(readme, "file:///android_asset/css/markdown.css");
+        mReadmeMarkdownView.setVisibility(View.VISIBLE);
     }
 
     @Override

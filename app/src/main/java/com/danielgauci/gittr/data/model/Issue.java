@@ -21,7 +21,6 @@ public class Issue implements Parcelable {
     private User user;
     private String state;
     private Boolean locked;
-    private User assignee;
     private Integer comments;
     private String createdAt;
     private String updatedAt;
@@ -143,14 +142,6 @@ public class Issue implements Parcelable {
         this.locked = locked;
     }
 
-    public Object getAssignee() {
-        return assignee;
-    }
-
-    public void setAssignee(User assignee) {
-        this.assignee = assignee;
-    }
-
     public List<User> getAssignees() {
         return assignees;
     }
@@ -182,7 +173,6 @@ public class Issue implements Parcelable {
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 
     public PullRequest getPullRequest() {
         return pullRequest;
@@ -216,14 +206,13 @@ public class Issue implements Parcelable {
         dest.writeParcelable(this.user, flags);
         dest.writeString(this.state);
         dest.writeValue(this.locked);
-        dest.writeParcelable(this.assignee, flags);
         dest.writeValue(this.comments);
         dest.writeString(this.createdAt);
         dest.writeString(this.updatedAt);
         dest.writeParcelable(this.pullRequest, flags);
         dest.writeString(this.body);
-        dest.writeList(this.assignees);
-        dest.writeList(this.labels);
+        dest.writeTypedList(this.assignees);
+        dest.writeTypedList(this.labels);
         dest.writeString(this.repositoryUrl);
         dest.writeString(this.labelsUrl);
         dest.writeString(this.commentsUrl);
@@ -242,23 +231,20 @@ public class Issue implements Parcelable {
         this.user = in.readParcelable(User.class.getClassLoader());
         this.state = in.readString();
         this.locked = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.assignee = in.readParcelable(Object.class.getClassLoader());
         this.comments = (Integer) in.readValue(Integer.class.getClassLoader());
         this.createdAt = in.readString();
         this.updatedAt = in.readString();
         this.pullRequest = in.readParcelable(PullRequest.class.getClassLoader());
         this.body = in.readString();
-        this.assignees = new ArrayList<User>();
-        in.readList(this.assignees, User.class.getClassLoader());
-        this.labels = new ArrayList<Label>();
-        in.readList(this.labels, Label.class.getClassLoader());
+        this.assignees = in.createTypedArrayList(User.CREATOR);
+        this.labels = in.createTypedArrayList(Label.CREATOR);
         this.repositoryUrl = in.readString();
         this.labelsUrl = in.readString();
         this.commentsUrl = in.readString();
         this.eventsUrl = in.readString();
     }
 
-    public static final Parcelable.Creator<Issue> CREATOR = new Parcelable.Creator<Issue>() {
+    public static final Creator<Issue> CREATOR = new Creator<Issue>() {
         @Override
         public Issue createFromParcel(Parcel source) {
             return new Issue(source);

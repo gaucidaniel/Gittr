@@ -6,14 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
-    <style name="SearchTheme" parent="AppTheme">
-
+    <style name="AppTheme.Detail">
+        <item name="android:windowEnterTransition">@transition/feed_detail_activity_enter</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/feed_detail_activity_shared_element</item>
+        <item name="android:windowSharedElementExitTransition">@transition/feed_detail_activity_shared_element</item>
     </style>
 
     <style name="Text">

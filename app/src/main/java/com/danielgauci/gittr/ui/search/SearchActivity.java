@@ -144,11 +144,6 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         mAdapter.showProgressWheel(show);
     }
 
-    @Override
-    public void eventSelected(Event event) {
-        // TODO: Open detail screen
-    }
-
     // Implement EventsListener methods
 
     @Override
@@ -156,9 +151,8 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         showMessage("No events found. Adjust the filters to show more events.");
     }
 
-
     @Override
-    public void onEventClicked(Event event) {
-        mPresenter.showEventDetail(event);
+    public void onEventClicked(Event event, EventsAdapter.EventViewHolder caller) {
+
     }
 }

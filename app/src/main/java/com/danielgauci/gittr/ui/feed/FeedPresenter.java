@@ -107,11 +107,6 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
         getNextEvents();
     }
 
-
-    public void onEventSelected(Event event) {
-        getMvpView().showEventDetail(event);
-    }
-
     @Override
     public void detachView() {
         super.detachView();

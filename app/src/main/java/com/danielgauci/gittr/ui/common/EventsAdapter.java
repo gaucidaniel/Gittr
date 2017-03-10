@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.utils.DateUtils;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
@@ -74,15 +75,18 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             EventViewHolder eventViewHolder = (EventViewHolder) holder;
 
             // Set profile picture
+            eventViewHolder.profilePictureImageView.setTransitionName("eventItemProfilePicture" + position);
             Picasso.with(mContext)
                     .load(event.getActor().getAvatarUrl())
                     .placeholder(R.color.greyLight)
                     .into(eventViewHolder.profilePictureImageView);
 
             // Set title
+            eventViewHolder.titleTextView.setTransitionName("eventItemTitle" + position);
             eventViewHolder.titleTextView.setText(event.getDescriptionSpannable(mContext, R.color.colorPrimary));
 
             // Set details
+            eventViewHolder.detailsTextView.setTransitionName("eventItemMessage" + position);
             if (event.getMessage().isEmpty()){
                 eventViewHolder.detailsTextView.setVisibility(View.GONE);
             } else  {
@@ -91,14 +95,8 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
 
             // Set date
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
-                Date createdAt = dateFormat.parse(event.getCreatedAt());
-                String dateString = mPrettyTime.format(createdAt);
-                eventViewHolder.dateTextView.setText(dateString);
-            } catch (ParseException e){
-                Timber.e("Failed to parse event time", e);
-            }
+            eventViewHolder.dateTextView.setTransitionName("eventItemDate" + position);
+            eventViewHolder.dateTextView.setText(DateUtils.formatDate(event.getCreatedAt(), mPrettyTime));
         }
     }
 
@@ -182,17 +180,18 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public class EventViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.event_item_profile_picture) CircleImageView profilePictureImageView;
-        @BindView(R.id.event_item_title) AppCompatTextView titleTextView;
-        @BindView(R.id.event_item_details) AppCompatTextView detailsTextView;
-        @BindView(R.id.event_item_date) AppCompatTextView dateTextView;
+        public @BindView(R.id.feed_detail_background) View background;
+        public @BindView(R.id.event_item_profile_picture) CircleImageView profilePictureImageView;
+        public @BindView(R.id.event_item_title) AppCompatTextView titleTextView;
+        public @BindView(R.id.event_item_details) AppCompatTextView detailsTextView;
+        public @BindView(R.id.event_item_date) AppCompatTextView dateTextView;
 
         private EventViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             // Subscribe to click events
-            RxView.clicks(itemView).subscribe((view) -> mEventsListener.onEventClicked(mAllEvents.get(getAdapterPosition())));
+            RxView.clicks(itemView).subscribe((view) -> mEventsListener.onEventClicked(mFilteredEvents.get(getAdapterPosition()), this));
         }
     }
 
@@ -207,6 +206,6 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         void onFilterResultsEmpty();
 
-        void onEventClicked(Event event);
+        void onEventClicked(Event event, EventViewHolder caller);
     }
 }

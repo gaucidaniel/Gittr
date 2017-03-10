@@ -20,6 +20,4 @@ public interface SearchMvpView extends MvpView {
     void hideMessage();
 
     void showProgressWheel(boolean show);
-
-    void eventSelected(Event event);
 }

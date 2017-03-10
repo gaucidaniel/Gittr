@@ -4,6 +4,8 @@ import android.text.SpannableStringBuilder;
 
 import com.danielgauci.gittr.ui.base.MvpView;
 
+import java.util.Date;
+
 /**
  * Created by daniel on 3/10/17.
  */
@@ -13,6 +15,10 @@ public interface FeedDetailMvpView extends MvpView {
     void setEventDescription(SpannableStringBuilder description);
 
     void setEventMessage(String message);
+
+    void setEventDate(String dateString);
+
+    void setEventProfilePicture(String profilePictureUrl);
 
     void setRepoTitle(String title);
 
