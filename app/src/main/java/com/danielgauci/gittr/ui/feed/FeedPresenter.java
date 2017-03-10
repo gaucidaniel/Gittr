@@ -10,6 +10,7 @@ import com.danielgauci.gittr.utils.NetworkUtils;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -21,6 +22,7 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
     private Context mContext;
     private DataManager mDataManager;
+    private Disposable mDisposable;
     private int mPage = 0;
     private boolean mIsLoading = false;
 
@@ -60,7 +62,7 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
         mIsLoading = true;
 
         // Fetch data from data manager
-        mDataManager.getPublicEvents(mPage)
+        mDisposable = mDataManager.getPublicEvents(mPage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(events -> {
@@ -108,5 +110,15 @@ public class FeedPresenter extends BasePresenter<FeedMvpView> {
 
     public void onEventSelected(Event event) {
         getMvpView().showEventDetail(event);
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+
+        // Dispose of subscription on detach
+        if (mDisposable != null){
+            mDisposable.dispose();
+        }
     }
 }

@@ -26,7 +26,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private Context mContext;
     private DataManager mDataManager;
     private String mQuery;
-    private Disposable mSubscription;
+    private Disposable mDisposable;
     private int mPage;
     private boolean mIsLoading;
 
@@ -75,7 +75,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             getMvpView().hideMessage();
 
             // Fetch data from data manager
-            mSubscription = mDataManager.getUserEvents(mQuery, mPage)
+            mDisposable = mDataManager.getUserEvents(mQuery, mPage)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(events -> {
@@ -115,5 +115,15 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     public void showEventDetail(Event event) {
         getMvpView().eventSelected(event);
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+
+        // Dispose of subscription on detach
+        if (mDisposable != null){
+            mDisposable.dispose();
+        }
     }
 }
