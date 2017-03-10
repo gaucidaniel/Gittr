@@ -1,6 +1,7 @@
 package com.danielgauci.gittr.ui.search;
 
 import android.app.SearchManager;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
@@ -16,6 +17,7 @@ import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.common.InfiniteScrollListener;
 import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
+import com.danielgauci.gittr.ui.feeddetail.FeedDetailActivity;
 import com.danielgauci.gittr.utils.KeyboardUtils;
 
 import java.util.List;
@@ -162,6 +164,10 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
 
     @Override
     public void onEventClicked(Event event, EventsAdapter.EventViewHolder caller) {
-
+        // Start detail activity with scene transition
+        Intent intent = new Intent(this, FeedDetailActivity.class);
+        intent.putExtra(FeedDetailActivity.EXTRA_EVENT, event);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }
