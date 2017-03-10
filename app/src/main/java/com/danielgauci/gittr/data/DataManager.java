@@ -32,7 +32,7 @@ public class DataManager {
         return mGithubService.getUserEvents(username, page);
     }
 
-    public Observable<Repo> getRepository(String repositoryName){
-        return mGithubService.getRepository(repositoryName);
+    public Observable<Repo> getRepository(String username, String repositoryName){
+        return mGithubService.getRepository(username, repositoryName);
     }
 }

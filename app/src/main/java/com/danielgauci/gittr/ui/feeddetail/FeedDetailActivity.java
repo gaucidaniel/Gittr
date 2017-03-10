@@ -8,14 +8,17 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.danielgauci.gittr.Gittr;
 import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.model.Event;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import javax.inject.Inject;
 
+import br.tiagohm.markdownview.MarkdownView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,6 +31,13 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
     @BindView(R.id.feed_detail_repo_title) TextView mRepoTitle;
     @BindView(R.id.feed_detail_repo_description) TextView mRepoDescription;
     @BindView(R.id.feed_detail_repo_language) TextView mRepoLanguage;
+    @BindView(R.id.feed_detail_repo_forks) TextView mRepoForks;
+    @BindView(R.id.feed_detail_repo_stars) TextView mRepoStars;
+    @BindView(R.id.feed_detail_repo_watches) TextView mRepoWatches;
+    @BindView(R.id.feed_detail_repo_readme) MarkdownView mReadmeMarkdownView;
+    @BindView(R.id.feed_detail_repo_message) TextView mRepoMessage;
+    @BindView(R.id.feed_detail_repo_details) LinearLayout mRepoDetails;
+    @BindView(R.id.feed_detail_repo_progress_wheel) ProgressWheel mRepoProgressWheel;
 
     @Inject
     FeedDetailPresenter mPresenter;
@@ -71,7 +81,7 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
 
     @Override
     public void setRepoDescription(String description) {
-        mRepoTitle.setText(description);
+        mRepoDescription.setText(description);
     }
 
     @Override
@@ -90,46 +100,47 @@ public class FeedDetailActivity extends AppCompatActivity implements FeedDetailM
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         // Update text view
-        mRepoDescription.setText(languageBuilder);
+        mRepoLanguage.setText(languageBuilder);
     }
 
     @Override
     public void setRepoStarCount(int starCount) {
-
+        mRepoStars.setText(String.valueOf(starCount));
     }
 
     @Override
     public void setRepoForkCount(int forkCount) {
-
+        mRepoForks.setText(String.valueOf(forkCount));
     }
 
     @Override
-    public void setWatchCount(int pullCount) {
-
+    public void setWatchCount(int watchCount) {
+        mRepoWatches.setText(String.valueOf(watchCount));
     }
 
     @Override
     public void setRepoReadme(String readme) {
-
+        mReadmeMarkdownView.loadMarkdown(readme, "file:///android_asset/css/markdown.css");
     }
 
     @Override
     public void showRepoDetails(boolean show) {
-
+        mRepoDetails.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showProgress(boolean show) {
-
+        mRepoProgressWheel.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showMessage(String message) {
-
+        mRepoMessage.setVisibility(View.VISIBLE);
+        mRepoMessage.setText(message);
     }
 
     @Override
     public void hideMessage() {
-
+        mRepoMessage.setVisibility(View.GONE);
     }
 }

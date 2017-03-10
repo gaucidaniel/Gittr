@@ -75,48 +75,197 @@
         android:background="@color/background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <!-- Title -->
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/feed_detail_repo_title"
+            <!-- Layout containing repo details -->
+            <LinearLayout
+                android:id="@+id/feed_detail_repo_details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_normal"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- Title -->
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/feed_detail_repo_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:padding="@dimen/spacing_large"
+                    android:textColor="@color/greyDark"
+                    android:fontFamily="monospace"
+                    android:background="@color/greyLight"
+                    style="@style/Text.Large"/>
+
+                <!-- Description -->
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/feed_detail_repo_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingRight="@dimen/spacing_large"
+                    android:paddingTop="@dimen/spacing_normal"
+                    android:paddingBottom="@dimen/spacing_small"
+                    android:textColor="@color/greyMedium"
+                    style="@style/Text"/>
+
+                <!-- Language -->
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/feed_detail_repo_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingRight="@dimen/spacing_large"
+                    android:paddingBottom="@dimen/spacing_normal"
+                    android:textColor="@color/greyMedium"
+                    style="@style/Text"/>
+
+                <!-- Stats -->
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginRight="@dimen/spacing_large"
+                    android:rowCount="2"
+                    android:columnCount="3">
+
+                    <!-- Forks -->
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/feed_detail_repo_forks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:layout_column="0"
+                        android:layout_row="0"
+                        style="@style/Text.Large"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:textAllCaps="true"
+                        android:text="Forks"
+                        android:layout_column="0"
+                        android:layout_row="1"
+                        style="@style/Text.Small"/>
+
+
+                    <!-- Stars -->
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/feed_detail_repo_stars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:layout_column="1"
+                        android:layout_row="0"
+                        style="@style/Text.Large"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:textAllCaps="true"
+                        android:text="Stars"
+                        android:layout_column="1"
+                        android:layout_row="1"
+                        style="@style/Text.Small"/>
+
+                    <!-- Watches -->
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/feed_detail_repo_watches"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:layout_column="2"
+                        android:layout_row="0"
+                        style="@style/Text.Large"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_small"
+                        android:textStyle="bold"
+                        android:textColor="@color/greyMedium"
+                        android:textAllCaps="true"
+                        android:text="Watches"
+                        android:layout_column="2"
+                        android:layout_row="1"
+                        style="@style/Text.Small"/>
+                </GridLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:background="@color/greyLight"/>
+
+                <!-- Readme -->
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingTop="@dimen/spacing_normal"
+                    android:paddingRight="@dimen/spacing_large"
+                    android:textStyle="bold"
+                    android:textColor="@color/greyMedium"
+                    android:textAllCaps="true"
+                    android:text="Readme"
+                    style="@style/Text.Small"/>
+
+                <br.tiagohm.markdownview.MarkdownView
+                    android:id="@+id/feed_detail_repo_readme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:escapeHtml="false"/>
+
+            </LinearLayout>
+
+            <!-- Message used for warnings and errors -->
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_detail_repo_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:padding="@dimen/spacing_large"
-                android:textColor="@color/greyDark"
-                android:fontFamily="monospace"
-                android:background="@color/greyLight"
-                style="@style/Text.Large"/>
+                android:gravity="center"
+                style="@style/Text.Small"/>
 
-            <!-- Description -->
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/feed_detail_repo_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/spacing_large"
-                android:textColor="@color/greyDark"
-                style="@style/Text"/>
-
-            <!-- Language -->
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/feed_detail_repo_language"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_large"
-                android:paddingLeft="@dimen/spacing_large"
-                android:paddingRight="@dimen/spacing_large"
-                android:textColor="@color/greyDark"
-                style="@style/Text"/>
-
-            <!-- Stats -->
-
-            <!-- Readme -->
-
-        </LinearLayout>
+            <!-- Progress wheel -->
+            <com.pnikosis.materialishprogress.ProgressWheel
+                android:id="@+id/feed_detail_repo_progress_wheel"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/spacing_large"
+                app:matProg_barColor="@color/colorPrimary"
+                app:matProg_progressIndeterminate="true" />
+        </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
@@ -124,8 +273,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:src="@drawable/ic_share_white_48dp"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
+        android:layout_margin="16dp"
         app:layout_anchor="@id/feed_detail_appbar"
         app:layout_anchorGravity="bottom|right|end"/>
 

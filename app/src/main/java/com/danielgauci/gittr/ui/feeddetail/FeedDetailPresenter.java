@@ -6,6 +6,8 @@ import com.danielgauci.gittr.R;
 import com.danielgauci.gittr.data.DataManager;
 import com.danielgauci.gittr.data.model.Event;
 import com.danielgauci.gittr.ui.base.BasePresenter;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import javax.inject.Inject;
 
@@ -30,24 +32,26 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailMvpView> {
         this.mContext = mContext;
     }
 
-    public void setEvent(Event event){
+    public void setEvent(Event event) {
         // Set basic event data
         getMvpView().setEventDescription(event.getDescriptionSpannable(mContext, android.R.color.white));
         getMvpView().setEventMessage(event.getMessage());
         getMvpView().setRepoTitle(event.getRepo().getName());
 
         // Get repository details
-        getRepository(event.getRepo().getName());
+        String username = event.getRepo().getName().split("/")[0];
+        String repo = event.getRepo().getName().split("/")[1];
+        getRepository(username, repo);
     }
 
-    private void getRepository(String name){
+    private void getRepository(String username, String repoName) {
         // Show progress wheel
         getMvpView().showProgress(true);
         getMvpView().showRepoDetails(false);
         getMvpView().hideMessage();
 
         // Subscribe to observable
-        mDisposable = mDataManager.getRepository(name)
+        mDisposable = mDataManager.getRepository(username, repoName)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe((repo) -> {
@@ -58,9 +62,15 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailMvpView> {
                     getMvpView().setRepoForkCount(repo.getForksCount());
                     getMvpView().setWatchCount(repo.getWatchersCount());
                     getMvpView().setRepoStarCount(repo.getStargazersCount());
-                    getMvpView().setRepoReadme("https://raw.githubusercontent.com/"
-                            + repo.getFullName()
-                            + "/master/README.md");
+
+                    // Get repo readme
+                    Ion.with(mContext)
+                            .load("https://raw.githubusercontent.com/" + repo.getFullName() + "/master/README.md")
+                            .asString()
+                            .setCallback((Exception e, String result) -> {
+                                getMvpView().setRepoReadme(e == null ? result : e.getMessage());
+                            });
+
 
                     // Show repo details
                     getMvpView().hideMessage();
@@ -83,7 +93,7 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailMvpView> {
         super.detachView();
 
         // Dispose of subscription on detach
-        if (mDisposable != null){
+        if (mDisposable != null) {
             mDisposable.dispose();
         }
     }

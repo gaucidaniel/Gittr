@@ -10,6 +10,7 @@
     <color name="tealDarker">#009688</color>
     <color name="grey">#95989A</color>
     <color name="greyLight">#e5e7e7</color>
+    <color name="greyMedium">#616161</color>
     <color name="greyDark">#212121</color>
     <color name="greyVeryLight">#f7f8f9</color>
     <color name="semiTransparent">#64000000</color>

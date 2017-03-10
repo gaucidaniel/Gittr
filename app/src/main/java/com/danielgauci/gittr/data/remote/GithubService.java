@@ -23,6 +23,6 @@ public interface GithubService {
     @GET("users/{username}/events")
     Observable<List<Event>> getUserEvents(@Path("username") String username, @Query("page") int page);
 
-    @GET("repos/{repositoryName}")
-    Observable<Repo> getRepository(@Path("repositoryName") String repositoryName);
+    @GET("repos/{username}/{repositoryName}")
+    Observable<Repo> getRepository(@Path("username") String username, @Path("repositoryName") String repositoryName);
 }

@@ -24,7 +24,7 @@ public interface FeedDetailMvpView extends MvpView {
 
     void setRepoForkCount(int forkCount);
 
-    void setWatchCount(int pullCount);
+    void setWatchCount(int watchCount);
 
     void setRepoReadme(String readme);
 
