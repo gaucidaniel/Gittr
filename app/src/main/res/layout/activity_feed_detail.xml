@@ -243,6 +243,9 @@
                     android:id="@+id/feed_detail_repo_readme"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginRight="@dimen/spacing_large"
+                    android:layout_marginBottom="@dimen/spacing_normal"
                     app:escapeHtml="false"/>
 
             </LinearLayout>
