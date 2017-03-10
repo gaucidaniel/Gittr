@@ -26,6 +26,7 @@ import com.danielgauci.gittr.data.model.Filter;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.common.InfiniteScrollListener;
 import com.danielgauci.gittr.ui.common.SimpleDividerDecoration;
+import com.danielgauci.gittr.ui.feeddetail.FeedDetailActivity;
 import com.danielgauci.gittr.ui.search.SearchActivity;
 import com.jakewharton.rxbinding.support.v4.widget.RxSwipeRefreshLayout;
 
@@ -170,7 +171,10 @@ public class FeedFragment extends Fragment implements FeedMvpView, EventsAdapter
 
     @Override
     public void showEventDetail(Event event) {
-        // TODO: Open detail activity
+        Intent intent = new Intent(getActivity(), FeedDetailActivity.class);
+        intent.putExtra(FeedDetailActivity.EXTRA_EVENT, event);
+        startActivity(intent);
+
     }
 
     // Implement Adapter Click listener

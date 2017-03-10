@@ -80,7 +80,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     .into(eventViewHolder.profilePictureImageView);
 
             // Set title
-            eventViewHolder.titleTextView.setText(event.getDescriptionSpannable(mContext));
+            eventViewHolder.titleTextView.setText(event.getDescriptionSpannable(mContext, R.color.colorPrimary));
 
             // Set details
             if (event.getMessage().isEmpty()){

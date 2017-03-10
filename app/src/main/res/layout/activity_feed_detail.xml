@@ -1,0 +1,132 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Collapsing layout for event details -->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/feed_detail_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/feed_detail_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="275dp"
+            app:contentScrim="#96303030"
+            app:expandedTitleMarginStart="@dimen/spacing_large"
+            app:expandedTitleMarginEnd="@dimen/spacing_large"
+            app:expandedTitleTextAppearance="@style/ExpandedToolbarAppearance"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:padding="@dimen/spacing_large"
+                app:layout_collapseMode="pin">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/event_item_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/spacing_normal"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:textColor="@color/greyLight"
+                        style="@style/Text"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/event_item_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_tiny"
+                        android:layout_marginBottom="@dimen/spacing_tiny"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:maxLines="5"
+                        android:ellipsize="end"
+                        style="@style/Text.WithBackground"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/feed_detail_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:popupTheme="@style/ThemeOverlay.AppCompat" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <!-- Repo details -->
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Title -->
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_detail_repo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_normal"
+                android:padding="@dimen/spacing_large"
+                android:textColor="@color/greyDark"
+                android:fontFamily="monospace"
+                android:background="@color/greyLight"
+                style="@style/Text.Large"/>
+
+            <!-- Description -->
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_detail_repo_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_large"
+                android:textColor="@color/greyDark"
+                style="@style/Text"/>
+
+            <!-- Language -->
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_detail_repo_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:paddingLeft="@dimen/spacing_large"
+                android:paddingRight="@dimen/spacing_large"
+                android:textColor="@color/greyDark"
+                style="@style/Text"/>
+
+            <!-- Stats -->
+
+            <!-- Readme -->
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/feed_detail_share_fab"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_share_white_48dp"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        app:layout_anchor="@id/feed_detail_appbar"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -5,6 +5,8 @@ package com.danielgauci.gittr.data.model;
  */
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -14,7 +16,7 @@ import android.text.style.ForegroundColorSpan;
 import com.danielgauci.gittr.R;
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+public class Event implements Parcelable {
 
     private String id;
     private String type;
@@ -63,15 +65,15 @@ public class Event {
         return createdAt;
     }
 
-    public SpannableStringBuilder getDescriptionSpannable(Context context) {
+    public SpannableStringBuilder getDescriptionSpannable(Context context, int color) {
         // Build description string
         SpannableStringBuilder descriptionBuilder = new SpannableStringBuilder();
         descriptionBuilder.append(actor.getLogin());
         descriptionBuilder.setSpan(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.colorPrimary)),
-                        0,
-                        descriptionBuilder.length(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        ContextCompat.getColor(context, color)),
+                0,
+                descriptionBuilder.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         descriptionBuilder.append(" ");
 
@@ -118,7 +120,7 @@ public class Event {
                 int memberStartPosition =  descriptionBuilder.length();
                 descriptionBuilder.append(payload.getMember().getLogin());
                 descriptionBuilder.setSpan(
-                        new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)),
+                        new ForegroundColorSpan(ContextCompat.getColor(context, color)),
                         memberStartPosition,
                         descriptionBuilder.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -173,10 +175,10 @@ public class Event {
         }
 
         descriptionBuilder.setSpan(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.colorPrimary)),
-                        spanStart,
-                        descriptionBuilder.length(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        ContextCompat.getColor(context, color)),
+                spanStart,
+                descriptionBuilder.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         return descriptionBuilder;
     }
@@ -244,4 +246,50 @@ public class Event {
         public final static String REPOSITORY = "RepositoryEvent";
         public final static String WATCH = "WatchEvent";
     }
+
+    protected Event(Parcel in) {
+        id = in.readString();
+        type = in.readString();
+        payload = (Payload) in.readValue(Payload.class.getClassLoader());
+        repo = (Repo) in.readValue(Repo.class.getClassLoader());
+        actor = (User) in.readValue(User.class.getClassLoader());
+        org = (Org) in.readValue(Org.class.getClassLoader());
+        createdAt = in.readString();
+        byte isPublicVal = in.readByte();
+        isPublic = isPublicVal == 0x02 ? null : isPublicVal != 0x00;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(type);
+        dest.writeValue(payload);
+        dest.writeValue(repo);
+        dest.writeValue(actor);
+        dest.writeValue(org);
+        dest.writeString(createdAt);
+        if (isPublic == null) {
+            dest.writeByte((byte) (0x02));
+        } else {
+            dest.writeByte((byte) (isPublic ? 0x01 : 0x00));
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 }

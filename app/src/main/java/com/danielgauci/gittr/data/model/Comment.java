@@ -1,12 +1,15 @@
 package com.danielgauci.gittr.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by daniel on 2/27/17.
  */
 
-public class Comment {
+public class Comment implements Parcelable {
 
     private String url;
     private Integer id;
@@ -84,4 +87,48 @@ public class Comment {
     public void setBody(String body) {
         this.body = body;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeValue(this.id);
+        dest.writeParcelable(this.user, flags);
+        dest.writeString(this.body);
+        dest.writeString(this.createdAt);
+        dest.writeString(this.updatedAt);
+        dest.writeString(this.htmlUrl);
+        dest.writeString(this.issueUrl);
+    }
+
+    public Comment() {
+    }
+
+    protected Comment(Parcel in) {
+        this.url = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.body = in.readString();
+        this.createdAt = in.readString();
+        this.updatedAt = in.readString();
+        this.htmlUrl = in.readString();
+        this.issueUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel source) {
+            return new Comment(source);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 }

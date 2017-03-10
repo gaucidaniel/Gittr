@@ -4,9 +4,12 @@ package com.danielgauci.gittr.data.model;
  * Created by daniel on 2/27/17.
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class PullRequest {
+public class PullRequest implements Parcelable {
 
     private String url;
     private Integer id;
@@ -112,4 +115,53 @@ public class PullRequest {
         this.user = user;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.url);
+        dest.writeValue(this.id);
+        dest.writeString(this.issueUrl);
+        dest.writeValue(this.number);
+        dest.writeString(this.state);
+        dest.writeValue(this.locked);
+        dest.writeString(this.title);
+        dest.writeParcelable(this.user, flags);
+        dest.writeString(this.htmlUrl);
+        dest.writeString(this.diffUrl);
+        dest.writeString(this.patchUrl);
+    }
+
+    public PullRequest() {
+    }
+
+    protected PullRequest(Parcel in) {
+        this.url = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.issueUrl = in.readString();
+        this.number = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.state = in.readString();
+        this.locked = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.title = in.readString();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.htmlUrl = in.readString();
+        this.diffUrl = in.readString();
+        this.patchUrl = in.readString();
+    }
+
+    public static final Parcelable.Creator<PullRequest> CREATOR = new Parcelable.Creator<PullRequest>() {
+        @Override
+        public PullRequest createFromParcel(Parcel source) {
+            return new PullRequest(source);
+        }
+
+        @Override
+        public PullRequest[] newArray(int size) {
+            return new PullRequest[size];
+        }
+    };
 }

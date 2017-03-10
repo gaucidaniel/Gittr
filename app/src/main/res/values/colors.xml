@@ -3,13 +3,14 @@
     <color name="colorPrimary">@color/teal</color>
     <color name="colorPrimaryDark">@color/tealFaded</color>
     <color name="colorAccent">@color/greyLight</color>
-    <color name="background">@color/greyLight</color>
+    <color name="background">@color/greyVeryLight</color>
 
     <color name="teal">#4CB5AB</color>
     <color name="tealFaded">#7ABCB6</color>
     <color name="tealDarker">#009688</color>
     <color name="grey">#95989A</color>
-    <color name="greyLight">#ECEFF0</color>
+    <color name="greyLight">#e5e7e7</color>
+    <color name="greyDark">#212121</color>
     <color name="greyVeryLight">#f7f8f9</color>
     <color name="semiTransparent">#64000000</color>
 </resources>

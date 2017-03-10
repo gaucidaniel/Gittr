@@ -7,6 +7,7 @@ import com.danielgauci.gittr.injection.ViewScope;
 import com.danielgauci.gittr.ui.common.EventsAdapter;
 import com.danielgauci.gittr.ui.feed.FeedPresenter;
 import com.danielgauci.gittr.ui.feed.FiltersAdapter;
+import com.danielgauci.gittr.ui.feeddetail.FeedDetailPresenter;
 import com.danielgauci.gittr.ui.search.SearchMvpView;
 import com.danielgauci.gittr.ui.search.SearchPresenter;
 
@@ -34,6 +35,11 @@ public class ViewModule {
     @Singleton
     public SearchPresenter providesSearchPresenter(DataManager dataManager, Context context){
         return new SearchPresenter(dataManager, context);
+    }
+
+    @Provides
+    FeedDetailPresenter providesDetailPresenter(DataManager dataManager, Context context){
+        return new FeedDetailPresenter(dataManager, context);
     }
 
     @Provides

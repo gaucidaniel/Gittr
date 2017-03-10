@@ -1,6 +1,7 @@
 package com.danielgauci.gittr.data;
 
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.data.model.Repo;
 import com.danielgauci.gittr.data.remote.GithubService;
 import com.danielgauci.gittr.data.remote.GithubServiceFactory;
 
@@ -29,5 +30,9 @@ public class DataManager {
 
     public Observable<List<Event>> getUserEvents(String username, int page){
         return mGithubService.getUserEvents(username, page);
+    }
+
+    public Observable<Repo> getRepository(String repositoryName){
+        return mGithubService.getRepository(repositoryName);
     }
 }

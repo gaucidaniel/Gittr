@@ -1,6 +1,7 @@
 package com.danielgauci.gittr.data.remote;
 
 import com.danielgauci.gittr.data.model.Event;
+import com.danielgauci.gittr.data.model.Repo;
 
 import java.util.List;
 
@@ -17,15 +18,11 @@ import retrofit2.http.Query;
 public interface GithubService {
 
     @GET("events")
-    Observable<List<Event>> getPublicEvents();
-
-
-    @GET("events")
     Observable<List<Event>> getPublicEvents(@Query("page") int page);
 
     @GET("users/{username}/events")
     Observable<List<Event>> getUserEvents(@Path("username") String username, @Query("page") int page);
 
-    @GET("users/{username}/received_events")
-    Observable<List<Event>> getUserReceivedEvents(@Path("username") String username);
+    @GET("repos/{repositoryName}")
+    Observable<Repo> getRepository(@Path("repositoryName") String repositoryName);
 }
