@@ -12,7 +12,9 @@ The following dependencies are crucial to the deveolpment of this project:
 * Retrofit for network calls
 * ButterKnife for view binding
 
-**[Install on Google Play (Alpha Testing)](https://play.google.com/apps/testing/com.danielgauci.gittr)**
+### Download
+
+**[Gittr 1.0](https://github.com/gaucidaniel/Gittr/app/app-release.apk)**
 
 
 ### Screenshots
