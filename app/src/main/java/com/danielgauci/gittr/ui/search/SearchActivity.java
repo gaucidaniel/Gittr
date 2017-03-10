@@ -116,6 +116,15 @@ public class SearchActivity extends AppCompatActivity implements SearchMvpView, 
         finishAfterTransition();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mPresenter != null){
+            mPresenter.detachView();
+        }
+
+        super.onDestroy();
+    }
+
     // Implement MVPView methods
 
     @Override

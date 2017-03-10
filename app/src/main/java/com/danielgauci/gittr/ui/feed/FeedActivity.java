@@ -123,6 +123,15 @@ public class FeedActivity extends AppCompatActivity implements FeedMvpView, Even
         mFiltersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mPresenter != null){
+            mPresenter.detachView();
+        }
+
+        super.onDestroy();
+    }
+
     // Implement MVPView Interface
 
     @Override

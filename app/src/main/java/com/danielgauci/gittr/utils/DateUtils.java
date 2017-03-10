@@ -5,6 +5,8 @@ import org.ocpsoft.prettytime.PrettyTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import timber.log.Timber;
 
@@ -18,9 +20,9 @@ public class DateUtils {
         // Set date
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             Date createdAt = dateFormat.parse(utcFormat);
-            String dateString = prettyTime.format(createdAt);
-            return dateString;
+            return prettyTime.format(createdAt);
         } catch (ParseException e){
             Timber.e("Failed to parse event time", e);
             return "moments ago";
