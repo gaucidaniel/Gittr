@@ -12,9 +12,6 @@ The following dependencies are crucial to the deveolpment of this project:
 * Retrofit for network calls
 * ButterKnife for view binding
 
-### Download
+### Releases
 
-**[Gittr 1.0](https://github.com/gaucidaniel/Gittr/app/app-release.apk)**
-
-
-### Screenshots
+**[Gittr 1.0](https://github.com/gaucidaniel/Gittr/releases/tag/v1.0)**
