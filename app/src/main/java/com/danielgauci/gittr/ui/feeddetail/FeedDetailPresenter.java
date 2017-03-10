@@ -92,7 +92,7 @@ public class FeedDetailPresenter extends BasePresenter<FeedDetailMvpView> {
                     // Show error
                     getMvpView().showProgress(false);
                     getMvpView().showRepoDetails(false);
-                    getMvpView().showMessage(error.getMessage());
+                    getMvpView().showMessage("Failed to load repository details.");
 
                     // Log error
                     Timber.e(error, error.getMessage());

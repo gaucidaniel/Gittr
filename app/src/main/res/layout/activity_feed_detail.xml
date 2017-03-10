@@ -19,7 +19,7 @@
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/feed_detail_collapsing_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="275dp"
+                android:layout_height="300dp"
                 app:contentScrim="#96303030"
                 app:expandedTitleMarginStart="@dimen/spacing_large"
                 app:expandedTitleMarginEnd="@dimen/spacing_large"
@@ -76,7 +76,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/spacing_tiny"
                                     android:layout_marginBottom="@dimen/spacing_tiny"
-                                    android:maxLines="5"
+                                    android:maxLines="4"
                                     android:ellipsize="end"
                                     android:transitionName="eventItemMessage"
                                     style="@style/Text.WithBackground"/>
